@@ -20,6 +20,6 @@ Once the right stakeholders are identified, it is advised to understand what is 
 
 Finally, the proposal of the program should be approved by each identified stakeholder, making the program a formal program.
 
-Please see [this artifact](../assets/artefacts/security%20champions%20(updated).pptx) used by a financial company (bank) to build its case for formalizing the security champion program. 
+Please see [this artifact](../assets/artifacts/security%20champions%20(updated).pptx) used by a financial company (bank) to build its case for formalizing the security champion program. 
 
 (p.s. In the included artifacts, clear disclaimers are included of the organization's context and why re-consideration is needed when copying and pasting the model to the user’s organization).

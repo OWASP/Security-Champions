@@ -31,5 +31,5 @@ A dedicated Captain can stay up-to-date on the latest information security pract
 
 The projects teams’ personal experience and interviews we have conducted with organizations that have Security Champions Programs have shown that leading a Security Champions program is a full-time job. In bigger organizations this may even require a small team. It is recommended to “nominate” or hire dedicated people that are passionate about this role and have the right skills set to drive it to ensure success. Having this as an “on the side job” takes away from the momentum and dedication needed to launch a successful program. Similarly, persons with security knowledge but lacking the right communication and organizational skills to drive such a program can be a factor in its lack of success. 
 
-## Artefacts
-[This job vacancy](../assets/artefacts/Security%20Champions%20Guide%20%2D%20Nominate%20a%20dedicated%20Captain%20%2D%20Job%20vacancy.pdf) can be used when looking to hire a dedicated Security Champion Captain.
+## Artifacts
+[This job vacancy](../assets/artifacts/Security%20Champions%20Guide%20%2D%20Nominate%20a%20dedicated%20Captain%20%2D%20Job%20vacancy.pdf) can be used when looking to hire a dedicated Security Champion Captain.
