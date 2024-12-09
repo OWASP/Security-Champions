@@ -33,6 +33,9 @@ theme:
 markdown_extensions:
   - def_list
 
+plugins:
+  - open-in-new-tab  
+
 nav:
   - Introduction: index.md
   - Manifesto: manifesto.md
