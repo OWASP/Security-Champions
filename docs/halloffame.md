@@ -12,16 +12,13 @@ Welcome to the Security Champions Guide Project's Hall of Fame! This page honors
 ### 2024
 
 - **Ahmed Mehtab**  
-  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/ahmedmehtab/) 
-  *Artifact donated:* Security Champions Program charter
+  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/ahmedmehtab/), *Artifact donated:* Security Champions Program charter
 
 - **REA Group**  
-  *Contact:* [website](https://www.rea-group.com/)
-   *Artifact donated:* Security Champions Program charter
+  *Contact:* [website](https://www.rea-group.com/), *Artifact donated:* Security Champions Program key action items and training incentives ideas
 
 - **Adrian Sroka**  
-  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/adriansroka/) 
-  *Artifact donated:* Security Champions Program charter
+  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/adriansroka/), *Artifact donated:* Security Champions Program case study
 
 ## Nomination Process
 
