@@ -7,9 +7,13 @@ Install python
 python3 -m pip install -r requirements.txt
 python3 -m pip install mkdocs
 
-### Testing locally
+## Testing locally
 python3 -m mkdocs serve to run website on http://127.0.0.1:8000/
 
 or
 
 python3 -m mkdocs build to generate site content for deployment
+
+## Plugins
+Install plugins when running locally:
+pip install mkdocs-open-in-new-tab
