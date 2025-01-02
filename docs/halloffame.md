@@ -7,7 +7,7 @@ Welcome to the Security Champions Guide Project's Hall of Fame! This page honors
 ### 2025
 
 - **It can be yourself!**  
-  *Artifact donated:* Look what artfiacts we are looking for: [here](https://securitychampions.owasp.org/artifacts/)
+  *Artifact donated:* Look what artifacts we are looking for: [here](https://securitychampions.owasp.org/artifacts/)
 
 ### 2024
 

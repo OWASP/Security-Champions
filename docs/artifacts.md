@@ -22,3 +22,6 @@ For example:
 * See more artifact types and their descriptions [here](https://docs.google.com/document/d/1eZHaBUMBxHmSLTVAhdaGVvZNl3MP5Fe-UCNFBuyY9RA/edit?usp=sharing)!
 
 We’re collecting data from companies worldwide that have Security Champions Programs at any stage of maturity (including wishful thinking!). Please contact us ([Irfaan Santoe](https://www.linkedin.com/in/irfaansantoe/), [Marisa Fagan](https://www.linkedin.com/in/marisafagan/), [Aleksandra Kornecka](https://www.linkedin.com/in/aleksandrakornecka/)) to set up a time to meet and donate.
+
+## Hall of Fame - donors of artifacts
+Find out who donated artifacts in our [Hall of Fame](halloffame.md)
