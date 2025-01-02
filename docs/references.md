@@ -2,7 +2,7 @@
 
 There's more Security Champions related content available online. Check out the content below to learn more.
 
-## OWASP
+## OWASP projects
 
 [OWASP Developer Guide - Security Champions](https://owasp.org/www-project-developer-guide/release/culture_building_and_process_maturing/security_champions/)
 
@@ -22,6 +22,9 @@ There's more Security Champions related content available online. Check out the 
 
 
 ## Videos
+
+
+[How to use the OWASP Security Champions Guide](https://www.youtube.com/watch?v=EoxpHIgJLNM) with Irfaan Santoe & Robin Van Loon
 
 [Building a Mature Security Champion Program](https://www.youtube.com/watch?v=7OKb-af0w2I) with Chris Ramirez
 
