@@ -3,6 +3,9 @@ This page contains all artifacts that can be used to start or improve your Secur
 ## 1. Secure management support
 - [Presentation: Business case for Security Champions](assets/artifacts/security%20champions%20(updated).pptx)
 
+## 2. Start with a Clear Vision
+- [Presentation: Program Charter, Guidelines and Best Practices](assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter,%20Guidelines%20and%20Best%20Practices.pptx)
+
 ## 3. Be passionate about security
 - [Checklist: Ignite the passion for security](assets/artifacts/Security%20Champions%20Guide%20-%20Be%20Passionate%20About%20Security%20-%20Checklist.pdf)
 
