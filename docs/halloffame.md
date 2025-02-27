@@ -6,6 +6,9 @@ Welcome to the Security Champions Guide Project's Hall of Fame! This page honors
 
 ### 2025
 
+- **Dewika Alakhramsing**  
+  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/dalakhramsing/), *Artifact donated:* Program Charter, Guidelines and Best Practices
+
 - **It can be yourself!**  
   *Artifact donated:* Look what artifacts we are looking for: [here](https://securitychampions.owasp.org/artifacts/)
 
