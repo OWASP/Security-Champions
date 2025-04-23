@@ -5,12 +5,16 @@ This page contains all artifacts that can be used to start or improve your Secur
 
 ## 2. Start with a Clear Vision
 - [Presentation: Program Charter, Guidelines and Best Practices](assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter,%20Guidelines%20and%20Best%20Practices.pptx)
+- [Presentation: Why Security Champions and how to start it](assets/artifacts/Security Inside Out - Developing Security Champions within your Teams - Diana Calderon.pdf)
 
 ## 3. Be passionate about security
 - [Checklist: Ignite the passion for security](assets/artifacts/Security%20Champions%20Guide%20-%20Be%20Passionate%20About%20Security%20-%20Checklist.pdf)
 
 ## 4. Nominate a dedicated captain
 - [Job vacancy: Dedicated Security Champion Captain](assets/artifacts/Security%20Champions%20Guide%20%2D%20Nominate%20a%20dedicated%20Captain%20%2D%20Job%20vacancy.pdf)
+
+## 5. Promote knowledge sharing
+- [Case study: teaching as key community builder](assets/artifacts/Security_Champions_-_case_study -Adrian Sroka - modified.pdf)
 
 ## Call for Security Champions Artifacts!
 The OWASP SCG Committee is looking for contributions in the form of artifacts and interviews. These can be (anonymized) presentations, program documents, or whatever tools have been useful to your organization.
