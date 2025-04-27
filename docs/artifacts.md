@@ -8,7 +8,7 @@ Artifacts per principle:
 
 ## 2. Start with a Clear Vision
 - [Presentation: Program Charter, Guidelines and Best Practices](assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter,%20Guidelines%20and%20Best%20Practices.pptx)
-- [Presentation: Why Security Champions and how to start it](assets/artifacts/Security%20Inside%20Out%20-%20Developing%20Security%20Champions%20within%20your%20Teams%20-%20Diana%20Calderon.pdf)
+- [Presentation: Why Security Champions and how to start it](assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf)
 
 ## 3. Secure management support
 - [Presentation: Business case for Security Champions](assets/artifacts/security%20champions%20(updated).pptx)
@@ -23,8 +23,8 @@ Artifacts per principle:
 - Waiting for your donated artifact!
 
 ## 7. Promote knowledge sharing
-- [Case study: teaching as key community builder](assets/artifacts/Security_Champions_-_case_study%20-Adrian%20Sroka%20-%20modified.pdf)
-- [Empowering Security Champions with Essential Tooling](assets/artifacts/Empowering%20Security%20Champions%20with%20Essential%20Tooling.pdf)
+- [Case study: teaching as key community builder](assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20teaching%20as%20key%20community%20builder.pdf)
+- [Empowering Security Champions with Essential Tooling](assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Empowering%20Security%20Champions%20with%20Essential%20Tooling.pdf)
 
 ## 8. Reward responsibility
 - Waiting for your donated artifact!
