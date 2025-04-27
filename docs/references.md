@@ -21,9 +21,8 @@ There's more Security Champions related content available online. Check out the 
 [The Security Champion’s Guide to Threat Modeling](https://4550632.fs1.hubspotusercontent-na1.net/hubfs/4550632/Security%20Champion%E2%80%99s%20Guide%20to%20Threat%20Modeling.pdf) by IriusRisk
 
 [Amazon Web Services Security Champions program - Security Guardians:](https://aws.amazon.com/blogs/security/how-aws-built-the-security-guardians-program-a-mechanism-to-distribute-security-ownership/)
-[How to build a Security Guardians program to distribute security ownership | AWS Security Blog](https://aws.amazon.com/blogs/security/how-to-build-your-own-security-guardians-program/)
 
-[Axway’s Security Champion case study](https://www.youtube.com/watch?v=7OKb-af0w2I)
+[How to build a Security Guardians program to distribute security ownership | AWS Security Blog](https://aws.amazon.com/blogs/security/how-to-build-your-own-security-guardians-program/)
 
 [Sage’s case study](https://www.securecodewarrior.com/article/sage-case-study)
 
@@ -33,15 +32,12 @@ There's more Security Champions related content available online. Check out the 
 
 [RX’s case study](https://www.infosecurity-magazine.com/news-features/security-champions-cultural/)
 
-
-
-
-
 ## Videos
-
 
 [How to use the OWASP Security Champions Guide](https://www.youtube.com/watch?v=EoxpHIgJLNM) with Irfaan Santoe & Robin Van Loon
 
 [Building a Mature Security Champion Program](https://www.youtube.com/watch?v=7OKb-af0w2I) with Chris Ramirez
 
 [Scaling a security champion program](https://www.youtube.com/watch?v=PrSKDrCb9Xg) with Sandy Blackwell
+
+[Axway’s Security Champion case study](https://www.youtube.com/watch?v=7OKb-af0w2I)
