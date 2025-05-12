@@ -36,6 +36,11 @@ markdown_extensions:
 plugins:
   - open-in-new-tab  
 
+extra:
+  analytics:
+    provider: google
+    property: G-7SHCE1L482
+
 nav:
   - Introduction: index.md
   - Manifesto: manifesto.md
