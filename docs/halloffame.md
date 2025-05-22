@@ -25,7 +25,7 @@ Welcome to the Security Champions Guide Project's Hall of Fame! This page honors
 
 - **REA Group**  
 
-   *Contact:* [website](https://www.rea-group.com/), *Artifact donated:* Security Champions Program key action items and training incentives ideas
+   *Contact:* [website](https://www.rea-group.com/), *Artifacts donated:* Security Champions Program key action items and training incentives ideas, Training Cadence
 
 - **Adrian Sroka**  
 
