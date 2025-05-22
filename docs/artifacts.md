@@ -27,7 +27,7 @@ Artifacts per principle:
 - [Empowering Security Champions with Essential Tooling](assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Empowering%20Security%20Champions%20with%20Essential%20Tooling.pdf)
 
 ## 8. Reward responsibility
-- [Guideline: How to track points in a Security Champion Program](assets/artifacts/HowtotrackpointsinaSecurity ChampionProgram.pdf)
+- [Guideline: How to track points in a Security Champion Program](assets/artifacts/HowtotrackpointsinaSecurityChampionProgram.pdf)
 
 ## 9. Invest in your champions
 - Waiting for your donated artifact!
