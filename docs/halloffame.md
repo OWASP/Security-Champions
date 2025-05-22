@@ -5,7 +5,7 @@ Welcome to the Security Champions Guide Project's Hall of Fame! This page honors
 ## Donors
 
 - **It can be yourself!**  
-  *Artifact donated:* Check what artifacts we are looking for: [here](https://securitychampions.owasp.org/artifacts/). We are pretty sure you can bring some!
+  *Artifacts donated:* Check what artifacts we are looking for: [here](https://securitychampions.owasp.org/artifacts/). We are pretty sure you can bring some!
   
 
 ### 2025
@@ -21,7 +21,7 @@ Welcome to the Security Champions Guide Project's Hall of Fame! This page honors
 
 - **Ahmed Mehtab**  
 
-  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/ahmedmehtab/), *Artifact donated:* Security Champions Program charter
+  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/ahmedmehtab/), *Artifacts donated:* Security Champions Program charter
 
 - **REA Group**  
 
@@ -29,11 +29,11 @@ Welcome to the Security Champions Guide Project's Hall of Fame! This page honors
 
 - **Adrian Sroka**  
 
-  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/adriansroka/), *Artifact donated:* Security Champions Program case study
+  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/adriansroka/), *Artifacts donated:* Security Champions Program case study
 
 - **Diana Calderon**
 
-  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/dianacalderon), *Artifact donated:* Security Inside Out - Developing Security Champions within your Teams.
+  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/dianacalderon), *Artifacts donated:* Security Inside Out - Developing Security Champions within your Teams.
 
 ## Nomination Process
 
