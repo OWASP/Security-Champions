@@ -14,7 +14,7 @@ Welcome to the Security Champions Guide Project's Hall of Fame! This page honors
   *Contact:* [LinkedIn profile](https://www.linkedin.com/in/dalakhramsing/), *Artifacts donated:* Program Charter, Guidelines and Best Practices, and also Empowering Security Champions with Essential Tooling
 
 - **Marisa Fagan**  
-  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/dalakhramsing/), *Artifacts donated:* How to track points in a Security Champion Program
+  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/marisafagan/), *Artifacts donated:* How to track points in a Security Champion Program
 
 
 ### 2024
