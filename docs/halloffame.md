@@ -5,7 +5,7 @@ Welcome to the Security Champions Guide Project's Hall of Fame! This page honors
 ## Donors
 
 - **It can be yourself!**  
-  *Artifacts donated:* Check what artifacts we are looking for: [here](https://securitychampions.owasp.org/artifacts/). We are pretty sure you can bring some!
+  Check what artifacts we are looking for: [here](https://securitychampions.owasp.org/artifacts/). We are pretty sure you can bring some!
   
 
 ### 2025
