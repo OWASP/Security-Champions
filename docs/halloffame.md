@@ -4,31 +4,36 @@ Welcome to the Security Champions Guide Project's Hall of Fame! This page honors
 
 ## Donors
 
+- **It can be yourself!**  
+  *Artifacts donated:* Check what artifacts we are looking for: [here](https://securitychampions.owasp.org/artifacts/). We are pretty sure you can bring some!
+  
+
 ### 2025
 
 - **Dewika Alakhramsing**  
   *Contact:* [LinkedIn profile](https://www.linkedin.com/in/dalakhramsing/), *Artifacts donated:* Program Charter, Guidelines and Best Practices, and also Empowering Security Champions with Essential Tooling
 
-- **It can be yourself!**  
-  *Artifact donated:* Look what artifacts we are looking for: [here](https://securitychampions.owasp.org/artifacts/)
+- **Marisa Fagan**  
+  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/dalakhramsing/), *Artifacts donated:* How to track points in a Security Champion Program
+
 
 ### 2024
 
 - **Ahmed Mehtab**  
 
-  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/ahmedmehtab/), *Artifact donated:* Security Champions Program charter
+  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/ahmedmehtab/), *Artifacts donated:* Security Champions Program charter
 
 - **REA Group**  
 
-   *Contact:* [website](https://www.rea-group.com/), *Artifact donated:* Security Champions Program key action items and training incentives ideas
+   *Contact:* [website](https://www.rea-group.com/), *Artifacts donated:* Security Champions Program key action items and training incentives ideas, Training Cadence
 
 - **Adrian Sroka**  
 
-  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/adriansroka/), *Artifact donated:* Security Champions Program case study
+  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/adriansroka/), *Artifacts donated:* Security Champions Program case study
 
 - **Diana Calderon**
 
-  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/dianacalderon), *Artifact donated:* Security Inside Out - Developing Security Champions within your Teams.
+  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/dianacalderon), *Artifacts donated:* Security Inside Out - Developing Security Champions within your Teams.
 
 ## Nomination Process
 
