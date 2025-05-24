@@ -11,7 +11,7 @@ Artifacts per principle:
 - [Presentation: Why Security Champions and how to start it](assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf)
 
 ## 3. Secure management support
-- [Presentation: Business case for Security Champions](assets/artifacts/security%20champions%20(updated).pptx)
+- [Presentation: Business case for Security Champions](assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Business%20case.pptx)
 
 ## 4. Nominate a dedicated captain
 - [Job vacancy: Dedicated Security Champion Captain](assets/artifacts/Security%20Champions%20Guide%20%2D%20Nominate%20a%20dedicated%20Captain%20%2D%20Job%20vacancy.pdf)
@@ -25,9 +25,10 @@ Artifacts per principle:
 ## 7. Promote knowledge sharing
 - [Case study: teaching as key community builder](assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20teaching%20as%20key%20community%20builder.pdf)
 - [Empowering Security Champions with Essential Tooling](assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Empowering%20Security%20Champions%20with%20Essential%20Tooling.pdf)
+- [Guideline: Security Champion Program Training Cadence](assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Training%20Cadence.pdf)
 
 ## 8. Reward responsibility
-- Waiting for your donated artifact!
+- [Guideline: How to track points in a Security Champion Program](assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20How%20to%20track%20points%20in%20a%20Security%20Champion%20Program.pdf)
 
 ## 9. Invest in your champions
 - Waiting for your donated artifact!
