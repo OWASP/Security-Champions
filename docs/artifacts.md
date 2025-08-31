@@ -9,7 +9,7 @@ Artifacts per principle:
 ## 2. Start with a Clear Vision
 - [Presentation: Program Charter, Guidelines and Best Practices](assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter,%20Guidelines%20and%20Best%20Practices.pptx)
 - [Presentation: Why Security Champions and how to start it](assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf)
-- [Waypoints and Pitfalls of Security Champion Program Roll-out at R&D Organizations](assets/artifacts/OWASP-Security-Champions-Guide_Waypoints-and-Pitfalls-for-R&D-Organizations.pdf)
+- [Waypoints and Pitfalls of Security Champion Program Roll-out at R&D Organizations](assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R&D%20Organizations.pdf)
 
 ## 3. Secure management support
 - [Presentation: Business case for Security Champions](assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Business%20case.pptx)
