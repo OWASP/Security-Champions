@@ -16,6 +16,8 @@ Welcome to the Security Champions Guide Project's Hall of Fame! This page honors
 - **Marisa Fagan**  
   *Contact:* [LinkedIn profile](https://www.linkedin.com/in/marisafagan/), *Artifacts donated:* How to track points in a Security Champion Program
 
+- **Olivia Fabreschi**  
+  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/oliviafabreschi/), *Artifacts donated:* Activity Logging Dashboard for a Metrics Oriented Security Champions Program
 
 ### 2024
 

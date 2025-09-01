@@ -30,6 +30,7 @@ Artifacts per principle:
 
 ## 8. Reward responsibility
 - [Guideline: How to track points in a Security Champion Program](assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20How%20to%20track%20points%20in%20a%20Security%20Champion%20Program.pdf)
+- [Activity Logging Dashboard for a Metrics Oriented Security Champions Program](assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20Activity%20Logging%20Dashboard.pdf)
 
 ## 9. Invest in your champions
 - Waiting for your donated artifact!
