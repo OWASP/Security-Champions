@@ -34,7 +34,8 @@ markdown_extensions:
   - def_list
 
 plugins:
-  - open-in-new-tab  
+  - open-in-new-tab
+  - search
 
 extra:
   analytics:
