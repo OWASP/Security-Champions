@@ -24,6 +24,7 @@ Coming soon!
 
 ## Various types of resources
 
+- [The Security Champions Framework](https://github.com/edgeroute/security-champion-framework/blob/main/Security-Champion-Framework.pdf) by Aaron Ott
 - [How to Launch a Successful Security Champion Program](https://www.iriusrisk.com/resources-blog/build-a-cybersecurity-powerhouse-how-to-launch-a-successful-security-champion-program) by Brandon Green
 - [Security Champion Program Success Guide](https://securitychampionsuccessguide.org/) by Dustin Lehr
 - [The Security Champion’s Guide to Threat Modeling](https://4550632.fs1.hubspotusercontent-na1.net/hubfs/4550632/Security%20Champion%E2%80%99s%20Guide%20to%20Threat%20Modeling.pdf) by IriusRisk
