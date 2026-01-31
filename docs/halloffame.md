@@ -19,6 +19,12 @@ Welcome to the Security Champions Guide Project's Hall of Fame! This page honors
 - **Olivia Fabreschi**  
   *Contact:* [LinkedIn profile](https://www.linkedin.com/in/oliviafabreschi/), *Artifacts donated:* Activity Logging Dashboard for a Metrics Oriented Security Champions Program
 
+- **Mateusz Trójczak**
+  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/mateusztrojczak/), *Artifacts donated:* Champions League or Sunday League?
+
+- **Adrian Sroka**  
+  *Contact:* [LinkedIn profile](https://www.linkedin.com/in/adriansroka/), *Artifacts donated:* How to support developers in secure coding?
+
 ### 2024
 
 - **Ahmed Mehtab**  
