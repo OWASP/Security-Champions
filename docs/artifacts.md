@@ -10,15 +10,17 @@ Artifacts per principle:
 - [Presentation: Program Charter, Guidelines and Best Practices](assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter,%20Guidelines%20and%20Best%20Practices.pptx)
 - [Presentation: Why Security Champions and how to start it](assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf)
 - [Waypoints and Pitfalls of Security Champion Program Roll-out at R&D Organizations](assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R&D%20Organizations.pdf)
+- [Champions League or Sunday League?](assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx)
 
 ## 3. Secure management support
 - [Presentation: Business case for Security Champions](assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Business%20case.pptx)
+- [Four Approaches to Security Champions Programs](assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Four%20Approaches%20to%20Security%20Champions%20Programs.pdf)
 
 ## 4. Nominate a dedicated captain
 - [Job vacancy: Dedicated Security Champion Captain](assets/artifacts/Security%20Champions%20Guide%20%2D%20Nominate%20a%20dedicated%20Captain%20%2D%20Job%20vacancy.pdf)
 
 ## 5. Trust your champions
-- Waiting for your donated artifact!
+- [How to support developers in secure coding?](assets/artifacts/Security%20Champions%20Guide%20-%20Trust%20your%20champions%20-%20How%20to%20support%20developers%20in%20secure%20coding.pdf)
 
 ## 6. Create a community
 - Waiting for your donated artifact!
