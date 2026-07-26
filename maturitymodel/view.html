@@ -1,0 +1,2728 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Champions Maturity Model — Grid View</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b27;
+      --surface2: #1e2538;
+      --surface3: #252d42;
+      --border: #2a3150;
+      --border2: #374060;
+      --text: #dde3f0;
+      --muted: #7e8aaa;
+      --light: #4a5370;
+
+      --m1: #5b9cf6;
+      --m1-dim: rgba(91, 156, 246, 0.14);
+      --m1-border: rgba(91, 156, 246, 0.28);
+      --m1-glow: rgba(91, 156, 246, 0.22);
+      --m1-txt: #c2d8ff;
+
+      --m2: #3ecf8e;
+      --m2-dim: rgba(62, 207, 142, 0.14);
+      --m2-border: rgba(62, 207, 142, 0.28);
+      --m2-glow: rgba(62, 207, 142, 0.22);
+      --m2-txt: #b5f0d5;
+
+      --m3: #f6a623;
+      --m3-dim: rgba(246, 166, 35, 0.14);
+      --m3-border: rgba(246, 166, 35, 0.28);
+      --m3-glow: rgba(246, 166, 35, 0.22);
+      --m3-txt: #ffe4a8;
+
+      --r: 8px;
+      --rs: 5px;
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f6fb;
+      --surface: #ffffff;
+      --surface2: #f0f2f8;
+      --surface3: #e6e9f4;
+      --border: #d4d9ec;
+      --border2: #b8c0d8;
+      --text: #1a1e2e;
+      --muted: #5a6282;
+      --light: #8892b0;
+
+      --m1: #1d5fc7;
+      --m1-dim: rgba(29, 95, 199, 0.09);
+      --m1-txt: #1a3f80;
+
+      --m2: #0f7a4a;
+      --m2-dim: rgba(15, 122, 74, 0.09);
+      --m2-txt: #0a4a2e;
+
+      --m3: #b86c00;
+      --m3-dim: rgba(184, 108, 0, 0.09);
+      --m3-txt: #7a4800;
+    }
+
+    /* theme toggle */
+    .theme-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--rs);
+      border: 1px solid var(--border2);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .15s;
+      flex-shrink: 0;
+    }
+
+    .theme-btn:hover {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* ─── TOPBAR ─── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.75rem;
+      height: 54px;
+    }
+
+    .tb-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tb-logo {
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, #5b9cf6 0%, #7c5bf6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .tb-logo svg {
+      width: 16px;
+      height: 16px;
+      fill: #fff;
+    }
+
+    .tb-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .tb-version {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 10px;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      color: var(--muted);
+    }
+
+    .tb-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tb-btn {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 13px;
+      border-radius: var(--rs);
+      border: 1px solid var(--border2);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all .15s;
+    }
+
+    .tb-btn:hover {
+      background: var(--surface2);
+      color: var(--text);
+      border-color: var(--border2);
+    }
+
+    .tb-btn.accent {
+      background: var(--m1);
+      color: #fff;
+      border-color: var(--m1);
+    }
+
+    .tb-btn.accent:hover {
+      opacity: .85;
+    }
+
+    /* ─── SUBBAR (legend + filter) ─── */
+    .subbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      min-height: 44px;
+    }
+
+    .legend {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      padding: 8px 0;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .legend-pip {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .legend-pip.m1 {
+      background: var(--m1);
+    }
+
+    .legend-pip.m2 {
+      background: var(--m2);
+    }
+
+    .legend-pip.m3 {
+      background: var(--m3);
+    }
+
+    .legend-divider {
+      width: 1px;
+      height: 14px;
+      background: var(--border);
+    }
+
+    .legend-hint {
+      font-size: 11px;
+      color: var(--light);
+    }
+
+    .filters {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 0;
+    }
+
+    .filters span {
+      font-size: 11px;
+      color: var(--light);
+      margin-right: 4px;
+    }
+
+    .f-btn {
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .f-btn:hover {
+      border-color: var(--border2);
+      color: var(--text);
+    }
+
+    .f-btn.on-all {
+      background: var(--surface3);
+      border-color: var(--border2);
+      color: var(--text);
+    }
+
+    .f-btn.on-m1 {
+      background: var(--m1-dim);
+      border-color: var(--m1);
+      color: var(--m1);
+    }
+
+    .f-btn.on-m2 {
+      background: var(--m2-dim);
+      border-color: var(--m2);
+      color: var(--m2);
+    }
+
+    .f-btn.on-m3 {
+      background: var(--m3-dim);
+      border-color: var(--m3);
+      color: var(--m3);
+    }
+
+    /* ─── GRID WRAPPER ─── */
+    .grid-outer {
+      padding: 1.5rem 1.75rem 4rem;
+      overflow-x: auto;
+    }
+
+    /* ─── MODEL GRID ─── */
+    .mgrid {
+      display: grid;
+      grid-template-columns: 190px repeat(3, minmax(200px, 1fr));
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      min-width: 820px;
+      width: 100%;
+    }
+
+    /* column headers */
+    .gh {
+      padding: 13px 15px;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .gh-dim {
+      background: var(--surface);
+      color: var(--light);
+      border-right: 1px solid var(--border);
+    }
+
+    .gh-m1 {
+      background: var(--m1-dim);
+      color: var(--m1);
+      border-right: 1px solid var(--border);
+      border-top: 2px solid var(--m1);
+      padding-top: 11px;
+    }
+
+    .gh-m2 {
+      background: var(--m2-dim);
+      color: var(--m2);
+      border-right: 1px solid var(--border);
+      border-top: 2px solid var(--m2);
+      padding-top: 11px;
+    }
+
+    .gh-m3 {
+      background: var(--m3-dim);
+      color: var(--m3);
+      border-top: 2px solid var(--m3);
+      padding-top: 11px;
+    }
+
+    .gh-badge {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .gh-m1 .gh-badge {
+      background: rgba(91, 156, 246, .2);
+      color: var(--m1);
+    }
+
+    .gh-m2 .gh-badge {
+      background: rgba(62, 207, 142, .2);
+      color: var(--m2);
+    }
+
+    .gh-m3 .gh-badge {
+      background: rgba(246, 166, 35, .2);
+      color: var(--m3);
+    }
+
+    .gh-sub {
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--light);
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    /* row label */
+    .rl {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .rl-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 1px;
+      line-height: 1;
+    }
+
+    .rl-text h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+
+    .rl-text p {
+      font-size: 11px;
+      color: var(--light);
+      line-height: 1.4;
+    }
+
+    /* cells */
+    .gc {
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-height: 90px;
+    }
+
+    .gc:last-child {
+      border-right: none;
+    }
+
+    .gc-m1 {
+      background: rgba(91, 156, 246, .025);
+    }
+
+    .gc-m2 {
+      background: rgba(62, 207, 142, .025);
+    }
+
+    .gc-m3 {
+      background: rgba(246, 166, 35, .025);
+    }
+
+    /* last row — no bottom border */
+    .last-row .rl,
+    .last-row .gc {
+      border-bottom: none;
+    }
+
+    /* ─── CHIPS ─── */
+    .chip {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      padding: 7px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.35;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text);
+      text-align: left;
+      width: 100%;
+      transition: background .13s, border-color .13s, box-shadow .13s, transform .1s;
+      position: relative;
+    }
+
+    .chip:focus-visible {
+      outline: 2px solid var(--m1);
+      outline-offset: 1px;
+    }
+
+    .chip.c1 {
+      background: var(--m1-dim);
+      border-color: var(--m1-border);
+      color: var(--m1-txt);
+    }
+
+    .chip.c2 {
+      background: var(--m2-dim);
+      border-color: var(--m2-border);
+      color: var(--m2-txt);
+    }
+
+    .chip.c3 {
+      background: var(--m3-dim);
+      border-color: var(--m3-border);
+      color: var(--m3-txt);
+    }
+
+    .chip.c1:hover {
+      background: rgba(91, 156, 246, .18);
+      border-color: var(--m1);
+      box-shadow: 0 2px 10px var(--m1-glow);
+      transform: translateY(-1px);
+    }
+
+    .chip.c2:hover {
+      background: rgba(62, 207, 142, .18);
+      border-color: var(--m2);
+      box-shadow: 0 2px 10px var(--m2-glow);
+      transform: translateY(-1px);
+    }
+
+    .chip.c3:hover {
+      background: rgba(246, 166, 35, .18);
+      border-color: var(--m3);
+      box-shadow: 0 2px 10px var(--m3-glow);
+      transform: translateY(-1px);
+    }
+
+    .chip.active.c1 {
+      background: rgba(91, 156, 246, .22);
+      border-color: var(--m1);
+      box-shadow: 0 0 0 2px var(--m1-glow);
+    }
+
+    .chip.active.c2 {
+      background: rgba(62, 207, 142, .22);
+      border-color: var(--m2);
+      box-shadow: 0 0 0 2px var(--m2-glow);
+    }
+
+    .chip.active.c3 {
+      background: rgba(246, 166, 35, .22);
+      border-color: var(--m3);
+      box-shadow: 0 0 0 2px var(--m3-glow);
+    }
+
+    .chip-pip {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .c1 .chip-pip {
+      background: var(--m1);
+    }
+
+    .c2 .chip-pip {
+      background: var(--m2);
+    }
+
+    .c3 .chip-pip {
+      background: var(--m3);
+    }
+
+    .chip-label {
+      flex: 1;
+    }
+
+    /* ─── OVERLAY ─── */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .6);
+      z-index: 60;
+      backdrop-filter: blur(3px);
+    }
+
+    .overlay.open {
+      display: block;
+    }
+
+    /* ─── SLIDE PANEL ─── */
+    .panel {
+      position: fixed;
+      top: 0;
+      right: -560px;
+      width: 520px;
+      max-width: 95vw;
+      height: 100vh;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      z-index: 61;
+      display: flex;
+      flex-direction: column;
+      transition: right .26s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .panel.open {
+      right: 0;
+    }
+
+    /* panel header */
+    .ph {
+      padding: 18px 20px 14px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .ph-crumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .ph-crumb .sep {
+      color: var(--border2);
+    }
+
+    .ph-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .ph-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+      flex: 1;
+    }
+
+    .ph-close {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+      border-radius: var(--rs);
+      border: 1px solid var(--border2);
+      background: transparent;
+      color: var(--muted);
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .15s;
+    }
+
+    .ph-close:hover {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .ph-tags {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .tag.m1 {
+      background: var(--m1-dim);
+      color: var(--m1);
+      border: 1px solid var(--m1);
+    }
+
+    .tag.m2 {
+      background: var(--m2-dim);
+      color: var(--m2);
+      border: 1px solid var(--m2);
+    }
+
+    .tag.m3 {
+      background: var(--m3-dim);
+      color: var(--m3);
+      border: 1px solid var(--m3);
+    }
+
+    .tag.dim {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border2);
+      font-weight: 600;
+    }
+
+    .tag.pillar {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border2);
+      font-weight: 500;
+    }
+
+    /* panel body */
+    .pb {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 20px;
+    }
+
+    .pb::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .pb::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    .ps {
+      margin-bottom: 20px;
+    }
+
+    .ps-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--light);
+      padding-bottom: 7px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .desc-block {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 15px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .indicators {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .ind {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .ind-arrow {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      background: var(--surface3);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: var(--light);
+    }
+
+    /* artifacts */
+    .art-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .art-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 13px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      text-decoration: none;
+      color: var(--text);
+      transition: background .13s, border-color .13s;
+    }
+
+    .art-card:hover {
+      background: var(--surface3);
+      border-color: var(--border2);
+    }
+
+    .art-ico {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--rs);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+    }
+
+    .art-ico.doc {
+      background: rgba(91, 156, 246, .15);
+    }
+
+    .art-ico.video {
+      background: rgba(220, 38, 38, .15);
+    }
+
+    .art-ico.link {
+      background: rgba(124, 58, 237, .15);
+    }
+
+    .art-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .art-info strong {
+      font-size: 13px;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .art-info span {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .art-ext {
+      font-size: 11px;
+      color: var(--light);
+      flex-shrink: 0;
+    }
+
+    .art-empty {
+      border: 1.5px dashed var(--border);
+      border-radius: var(--r);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .art-empty p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .art-empty span {
+      font-size: 11px;
+      color: var(--light);
+    }
+
+    /* panel footer nav */
+    .pf {
+      flex-shrink: 0;
+      border-top: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .pf-btn {
+      flex: 1;
+      padding: 8px 6px;
+      border-radius: var(--rs);
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all .15s;
+    }
+
+    .pf-btn:not(:disabled):hover {
+      background: var(--surface3);
+      border-color: var(--border2);
+      color: var(--text);
+    }
+
+    .pf-btn:disabled {
+      opacity: .3;
+      cursor: not-allowed;
+    }
+
+    .pf-counter {
+      flex: 0 0 auto;
+      align-self: center;
+      font-size: 11px;
+      color: var(--light);
+      padding: 0 4px;
+      white-space: nowrap;
+    }
+
+    /* ─── Assessment status overlays on chips ─── */
+    .chip.st-full {
+      box-shadow: inset 0 0 0 2px #16a34a;
+    }
+
+    .chip.st-partial {
+      box-shadow: inset 0 0 0 2px #d97706;
+    }
+
+    .chip.st-none {
+      opacity: .45;
+    }
+
+    .chip.st-full .chip-status {
+      background: #16a34a;
+      color: #fff;
+    }
+
+    .chip.st-partial .chip-status {
+      background: #d97706;
+      color: #fff;
+    }
+
+    .chip.st-none .chip-status {
+      background: #dc2626;
+      color: #fff;
+    }
+
+    .chip-status {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      margin-left: auto;
+      white-space: nowrap;
+      line-height: 1.6;
+    }
+
+    /* assessment results banner */
+    .results-banner {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .rb-stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    .rb-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .rb-dot.full {
+      background: #16a34a;
+    }
+
+    .rb-dot.partial {
+      background: #d97706;
+    }
+
+    .rb-dot.none {
+      background: #dc2626;
+    }
+
+    .rb-dot.unanswered {
+      background: var(--border2);
+    }
+
+    .rb-divider {
+      width: 1px;
+      height: 16px;
+      background: var(--border);
+    }
+
+    .rb-filter-btn {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .rb-filter-btn:hover {
+      border-color: var(--border2);
+      color: var(--text);
+    }
+
+    .rb-filter-btn.on {
+      background: var(--surface3);
+      border-color: var(--border2);
+      color: var(--text);
+    }
+
+    .rb-filter-btn.on-full {
+      background: rgba(22, 163, 74, .12);
+      border-color: #16a34a;
+      color: #16a34a;
+    }
+
+    .rb-filter-btn.on-partial {
+      background: rgba(217, 119, 6, .12);
+      border-color: #d97706;
+      color: #d97706;
+    }
+
+    .rb-filter-btn.on-none {
+      background: rgba(220, 38, 38, .12);
+      border-color: #dc2626;
+      color: #dc2626;
+    }
+
+    /* panel status badge */
+    .p-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .p-status-badge.full {
+      background: rgba(22, 163, 74, .12);
+      color: #16a34a;
+      border: 1px solid #16a34a;
+    }
+
+    .p-status-badge.partial {
+      background: rgba(217, 119, 6, .12);
+      color: #d97706;
+      border: 1px solid #d97706;
+    }
+
+    .p-status-badge.none {
+      background: rgba(220, 38, 38, .12);
+      color: #dc2626;
+      border: 1px solid #dc2626;
+    }
+
+    .p-status-badge.unanswered {
+      background: var(--surface2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    /* scrollbar global */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--border2);
+    }
+  </style>
+</head>
+
+<body style="">
+
+  <!-- ─── TOPBAR ─── -->
+  <header class="topbar">
+    <div class="tb-left">
+      <a href="https://securitychampions.owasp.org/" target="_blank" rel="noopener"
+        style="display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0">
+        <img src="/assets/images//OWASP_Security_Champions_Guide_logo_SBS.png" alt="OWASP Security Champions Guide"
+          style="height:32px;width:auto;object-fit:contain;">
+      </a>
+      <div style="width:1px;height:24px;background:var(--border);flex-shrink:0"></div>
+      <span class="tb-title">Maturity Model</span>
+      <span class="tb-version">v0.2</span>
+    </div>
+    <div class="tb-right">
+      <button class="theme-btn" id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">🌙</button>
+      <a href="assessment.html" class="tb-btn">📋 Self-assessment →</a>
+    </div>
+  </header>
+
+  <!-- ─── SUBBAR ─── -->
+  <div class="subbar">
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-pip m1"></div><strong>M1</strong>&nbsp;Foundational
+      </div>
+      <div class="legend-item">
+        <div class="legend-pip m2"></div><strong>M2</strong>&nbsp;Structured
+      </div>
+      <div class="legend-item">
+        <div class="legend-pip m3"></div><strong>M3</strong>&nbsp;Advanced
+      </div>
+      <div class="legend-divider"></div>
+      <span class="legend-hint">Click any activity to see details and linked artifacts</span>
+      <div class="legend-divider"></div>
+      <div class="legend-item" style="gap:4px">
+        <span
+          style="font-size:10px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:1px 6px;color:var(--muted)">🔒
+          localStorage</span>
+        <span style="font-size:10px;color:var(--light)">Results stay in this browser only</span>
+      </div>
+    </div>
+    <div class="filters">
+      <span>Filter:</span>
+      <button class="f-btn on-all" id="fb-all" onclick="setFilter(&#39;all&#39;)">All</button>
+      <button class="f-btn" id="fb-1" onclick="setFilter(&#39;1&#39;)">M1 only</button>
+      <button class="f-btn" id="fb-2" onclick="setFilter(&#39;2&#39;)">M2 only</button>
+      <button class="f-btn" id="fb-3" onclick="setFilter(&#39;3&#39;)">M3 only</button>
+    </div>
+  </div>
+
+  <!-- ─── OWASP BANNER ─── -->
+  <div
+    style="background:var(--surface);border-bottom:1px solid var(--border);padding:10px 1.75rem;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+    <img src="/assets/images/OWASP_Security_Champions_Manifesto.png" alt="OWASP Security Champions Manifesto"
+      style="height:36px;width:auto;object-fit:contain;flex-shrink:0">
+    <div style="flex:1;min-width:200px">
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px">Based on the OWASP Security
+        Champions Manifesto</div>
+      <div style="font-size:11px;color:var(--muted)">An open-source, vendor-neutral framework for building and maturing
+        Security Champion programs. <a href="https://securitychampions.owasp.org/" target="_blank" rel="noopener"
+          style="color:var(--m1);text-decoration:none">securitychampions.owasp.org →</a></div>
+    </div>
+  </div>
+
+  <!-- ─── GRID ─── -->
+  <!-- Shown when no assessment data is present -->
+  <div id="no-results-banner"
+    style="background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 1.75rem; display: none; align-items: center; gap: 14px; flex-wrap: wrap;">
+    <span style="font-size:18px">📋</span>
+    <div style="flex:1;min-width:200px">
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px">No assessment results loaded</div>
+      <div style="font-size:11px;color:var(--muted)">This is a read-only reference view. Complete the self-assessment to
+        see your results overlaid here.</div>
+    </div>
+    <a href="assessment.html"
+      style="padding:6px 14px;background:var(--m1);color:white;border-radius:var(--rs);font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap;flex-shrink:0">📋
+      Take assessment →</a>
+  </div>
+
+  <!-- Shown when assessment data is present -->
+  <div id="results-banner" class="results-banner" style="display: flex;">
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+      <span style="font-size:14px">✅</span>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:var(--text)">Your assessment results</div>
+        <div style="font-size:10px;color:var(--muted)">Stored locally in this browser · <button
+            onclick="clearAssessmentResults()"
+            style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:10px;text-decoration:underline;padding:0">Clear</button>
+        </div>
+      </div>
+    </div>
+    <div class="rb-divider"></div>
+    <div class="rb-stat">
+      <div class="rb-dot full"></div><span id="rb-full-count">16</span>&nbsp;done
+    </div>
+    <div class="rb-stat">
+      <div class="rb-dot partial"></div><span id="rb-partial-count">41</span>&nbsp;partial
+    </div>
+    <div class="rb-stat">
+      <div class="rb-dot none"></div><span id="rb-none-count">16</span>&nbsp;not done
+    </div>
+    <div class="rb-stat">
+      <div class="rb-dot unanswered"></div><span id="rb-unanswered-count">0</span>&nbsp;not assessed
+    </div>
+    <div class="rb-divider"></div>
+    <span style="font-size:11px;font-weight:600;color:var(--muted)">Filter:</span>
+    <button class="rb-filter-btn on" id="rbf-all" onclick="setStatusFilter(&#39;all&#39;)">All</button>
+    <button class="rb-filter-btn" id="rbf-full" onclick="setStatusFilter(&#39;full&#39;)">✓ Done</button>
+    <button class="rb-filter-btn" id="rbf-partial" onclick="setStatusFilter(&#39;partial&#39;)">◑ Partial</button>
+    <button class="rb-filter-btn" id="rbf-none" onclick="setStatusFilter(&#39;none&#39;)">✕ Not done</button>
+    <button class="rb-filter-btn" id="rbf-unanswered" onclick="setStatusFilter(&#39;unanswered&#39;)">– Not
+      assessed</button>
+    <div class="rb-divider"></div>
+    <a href="assessment.html"
+      style="font-size:11px;color:var(--m1);text-decoration:none;font-weight:500;white-space:nowrap">✏️ Edit assessment
+      →</a>
+  </div>
+  <div class="grid-outer">
+    <div class="mgrid" id="mgrid">
+      <div class="gh gh-dim"><span style="font-size:11px;color:var(--light)">Dimension</span></div>
+      <div class="gh gh-m1" data-lv-filter="1"><span class="gh-badge">1</span>
+        <div>
+          <div>M1 — Foundational</div>
+          <div class="gh-sub">Initial optimisation</div>
+        </div>
+      </div>
+      <div class="gh gh-m2" data-lv-filter="2"><span class="gh-badge">2</span>
+        <div>
+          <div>M2 — Structured</div>
+          <div class="gh-sub">Structured realisation</div>
+        </div>
+      </div>
+      <div class="gh gh-m3" data-lv-filter="3"><span class="gh-badge">3</span>
+        <div>
+          <div>M3 — Advanced</div>
+          <div class="gh-sub">Optimised operation</div>
+        </div>
+      </div>
+      <div class="rl">
+        <div class="rl-icon">🎯</div>
+        <div class="rl-text">
+          <h3>Strategic Foundations</h3>
+          <p>Vision, management support &amp; leadership</p>
+        </div>
+      </div>
+      <div class="gc gc-m1" data-lv-filter="1"><button class="chip c1 st-none" data-qid="q1" data-lv="1"
+          aria-label="We have drafted a vision and a mission for our champions program"><span
+            class="chip-pip"></span><span class="chip-label">We have drafted a vision and a mission for our champions
+            program</span><span class="chip-status">✕</span></button><button class="chip c1 st-partial" data-qid="q2"
+          data-lv="1" aria-label="We have performed a stakeholder analysis to shape our program vision"><span
+            class="chip-pip"></span><span class="chip-label">We have performed a stakeholder analysis to shape our
+            program vision</span><span class="chip-status">◑</span></button><button class="chip c1 st-full"
+          data-qid="q3" data-lv="1"
+          aria-label="A program advocate has pitched the champions initiative to gain management support"><span
+            class="chip-pip"></span><span class="chip-label">A program advocate has pitched the champions initiative to
+            gain management support</span><span class="chip-status">✓</span></button><button class="chip c1 st-partial"
+          data-qid="q4" data-lv="1"
+          aria-label="We have piloted the champions program in parts of the organization"><span
+            class="chip-pip"></span><span class="chip-label">We have piloted the champions program in parts of the
+            organization</span><span class="chip-status">◑</span></button><button class="chip c1 st-partial"
+          data-qid="q6" data-lv="1"
+          aria-label="We actively raise management awareness to strengthen program support"><span
+            class="chip-pip"></span><span class="chip-label">We actively raise management awareness to strengthen
+            program support</span><span class="chip-status">◑</span></button><button class="chip c1 st-full"
+          data-qid="q7" data-lv="1"
+          aria-label="We have drafted the purpose, scope, and responsibilities for the captain role"><span
+            class="chip-pip"></span><span class="chip-label">We have drafted the purpose, scope, and responsibilities
+            for the captain role</span><span class="chip-status">✓</span></button><button class="chip c1 st-partial"
+          data-qid="q8" data-lv="1" aria-label="An interim captain is shaping the champions program"><span
+            class="chip-pip"></span><span class="chip-label">An interim captain is shaping the champions
+            program</span><span class="chip-status">◑</span></button><button class="chip c1 st-none" data-qid="q9"
+          data-lv="1"
+          aria-label="We have drafted the purpose, scope, and responsibilities for our security champions"><span
+            class="chip-pip"></span><span class="chip-label">We have drafted the purpose, scope, and responsibilities
+            for our security champions</span><span class="chip-status">✕</span></button><button class="chip c1 st-none"
+          data-qid="q10" data-lv="1"
+          aria-label="We have drafted the appointment process and criteria for security champions"><span
+            class="chip-pip"></span><span class="chip-label">We have drafted the appointment process and criteria for
+            security champions</span><span class="chip-status">✕</span></button></div>
+      <div class="gc gc-m2" data-lv-filter="2"><button class="chip c2 st-partial" data-qid="q5" data-lv="2"
+          aria-label="Local management actively supports the champions program within their teams"><span
+            class="chip-pip"></span><span class="chip-label">Local management actively supports the champions program
+            within their teams</span><span class="chip-status">◑</span></button><button class="chip c2 st-partial"
+          data-qid="q11" data-lv="2"
+          aria-label="We incorporated lessons learned from pre-existing initiatives to inform our program design"><span
+            class="chip-pip"></span><span class="chip-label">We incorporated lessons learned from pre-existing
+            initiatives to inform our program design</span><span class="chip-status">◑</span></button><button
+          class="chip c2 st-none" data-qid="q12" data-lv="2"
+          aria-label="We have identified and communicated the benefits and business value of our security champions program"><span
+            class="chip-pip"></span><span class="chip-label">We have identified and communicated the benefits and
+            business value of our security champions program</span><span class="chip-status">✕</span></button><button
+          class="chip c2 st-full" data-qid="q13" data-lv="2"
+          aria-label="We have identified key security focus areas to guide our champions program"><span
+            class="chip-pip"></span><span class="chip-label">We have identified key security focus areas to guide our
+            champions program</span><span class="chip-status">✓</span></button><button class="chip c2 st-none"
+          data-qid="q14" data-lv="2"
+          aria-label="Our stakeholders are identified and aligned with the program&#39;s purpose, mission, and vision"><span
+            class="chip-pip"></span><span class="chip-label">Our stakeholders are identified and aligned with the
+            program's purpose, mission, and vision</span><span class="chip-status">✕</span></button><button
+          class="chip c2 st-partial" data-qid="q15" data-lv="2"
+          aria-label="We have defined the resource requirements needed to support our program"><span
+            class="chip-pip"></span><span class="chip-label">We have defined the resource requirements needed to support
+            our program</span><span class="chip-status">◑</span></button><button class="chip c2 st-partial"
+          data-qid="q16" data-lv="2"
+          aria-label="We have defined clear roles and responsibilities within our champions program"><span
+            class="chip-pip"></span><span class="chip-label">We have defined clear roles and responsibilities within our
+            champions program</span><span class="chip-status">◑</span></button><button class="chip c2 st-partial"
+          data-qid="q17" data-lv="2"
+          aria-label="We have an approved a program charter with support from our decision makers in the organization"><span
+            class="chip-pip"></span><span class="chip-label">We have an approved a program charter with support from our
+            decision makers in the organization</span><span class="chip-status">◑</span></button><button
+          class="chip c2 st-partial" data-qid="q18" data-lv="2"
+          aria-label="We have appointed a dedicated captain for our champions program"><span
+            class="chip-pip"></span><span class="chip-label">We have appointed a dedicated captain for our champions
+            program</span><span class="chip-status">◑</span></button><button class="chip c2 st-none" data-qid="q19"
+          data-lv="2" aria-label="We have translated our program vision into clear goals and SMART objectives"><span
+            class="chip-pip"></span><span class="chip-label">We have translated our program vision into clear goals and
+            SMART objectives</span><span class="chip-status">✕</span></button><button class="chip c2 st-full"
+          data-qid="q20" data-lv="2"
+          aria-label="We regularly review our program&#39;s mission and vision to ensure alignment with business objectives"><span
+            class="chip-pip"></span><span class="chip-label">We regularly review our program's mission and vision to
+            ensure alignment with business objectives</span><span class="chip-status">✓</span></button><button
+          class="chip c2 st-full" data-qid="q21" data-lv="2"
+          aria-label="We have defined a program that aligns with organizational goals"><span
+            class="chip-pip"></span><span class="chip-label">We have defined a program that aligns with organizational
+            goals</span><span class="chip-status">✓</span></button><button class="chip c2 st-full" data-qid="q22"
+          data-lv="2"
+          aria-label="We have formalized the captain role with a defined scope, responsibilities, and requirements"><span
+            class="chip-pip"></span><span class="chip-label">We have formalized the captain role with a defined scope,
+            responsibilities, and requirements</span><span class="chip-status">✓</span></button><button
+          class="chip c2 st-full" data-qid="q23" data-lv="2"
+          aria-label="Security champions are given a clear scope of responsibility"><span class="chip-pip"></span><span
+            class="chip-label">Security champions are given a clear scope of responsibility</span><span
+            class="chip-status">✓</span></button></div>
+      <div class="gc gc-m3" data-lv-filter="3"><button class="chip c3 st-partial" data-qid="q24" data-lv="3"
+          aria-label="We use feedback of security champions to optimize our security champions program in a structured way"><span
+            class="chip-pip"></span><span class="chip-label">We use feedback of security champions to optimize our
+            security champions program in a structured way</span><span class="chip-status">◑</span></button><button
+          class="chip c3 st-none" data-qid="q25" data-lv="3"
+          aria-label="We track and regularly report on performance against program goals and objectives"><span
+            class="chip-pip"></span><span class="chip-label">We track and regularly report on performance against
+            program goals and objectives</span><span class="chip-status">✕</span></button><button
+          class="chip c3 st-partial" data-qid="q26" data-lv="3"
+          aria-label="We automate the gathering and reporting of the programs SMART objectives"><span
+            class="chip-pip"></span><span class="chip-label">We automate the gathering and reporting of the programs
+            SMART objectives</span><span class="chip-status">◑</span></button><button class="chip c3 st-partial"
+          data-qid="q27" data-lv="3"
+          aria-label="Our champions program is formally integrated into the information security program and aligned with business objectives"><span
+            class="chip-pip"></span><span class="chip-label">Our champions program is formally integrated into the
+            information security program and aligned with business objectives</span><span
+            class="chip-status">◑</span></button><button class="chip c3 st-partial" data-qid="q28" data-lv="3"
+          aria-label="The captain role is standardized and has documented  tasks and responsibilities through e.g. playbooks or role description"><span
+            class="chip-pip"></span><span class="chip-label">The captain role is standardized and has documented tasks
+            and responsibilities through e.g. playbooks or role description</span><span
+            class="chip-status">◑</span></button><button class="chip c3 st-full" data-qid="q29" data-lv="3"
+          aria-label="We define, measure, and regularly review success metrics for the captain role"><span
+            class="chip-pip"></span><span class="chip-label">We define, measure, and regularly review success metrics
+            for the captain role</span><span class="chip-status">✓</span></button><button class="chip c3 st-partial"
+          data-qid="q30" data-lv="3"
+          aria-label="Security champions are empowered to make independent, risk-based decisions within defined boundaries"><span
+            class="chip-pip"></span><span class="chip-label">Security champions are empowered to make independent,
+            risk-based decisions within defined boundaries</span><span class="chip-status">◑</span></button></div>
+      <div class="rl">
+        <div class="rl-icon">👥</div>
+        <div class="rl-text">
+          <h3>Community &amp; Culture</h3>
+          <p>Passion, trust, community &amp; knowledge sharing</p>
+        </div>
+      </div>
+      <div class="gc gc-m1" data-lv-filter="1"><button class="chip c1 st-none" data-qid="q31" data-lv="1"
+          aria-label="Informal gathering of a community to discuss security topics"><span class="chip-pip"></span><span
+            class="chip-label">Informal gathering of a community to discuss security topics</span><span
+            class="chip-status">✕</span></button><button class="chip c1 st-partial" data-qid="q32" data-lv="1"
+          aria-label="A few individuals or teams are posting security information on internal collaboration channels"><span
+            class="chip-pip"></span><span class="chip-label">A few individuals or teams are posting security information
+            on internal collaboration channels</span><span class="chip-status">◑</span></button><button
+          class="chip c1 st-partial" data-qid="q33" data-lv="1"
+          aria-label="A few individuals or teams have started to engage with the security department and/or security management on security topics and/or challenges in their field"><span
+            class="chip-pip"></span><span class="chip-label">A few individuals or teams have started to engage with the
+            security department and/or security management on security topics and/or challenges in their
+            field</span><span class="chip-status">◑</span></button><button class="chip c1 st-none" data-qid="q34"
+          data-lv="1"
+          aria-label="There are established communication and collaboration channels for security champions"><span
+            class="chip-pip"></span><span class="chip-label">There are established communication and collaboration
+            channels for security champions</span><span class="chip-status">✕</span></button><button
+          class="chip c1 st-partial" data-qid="q35" data-lv="1"
+          aria-label="Information about the champions program is accessible in the organisation"><span
+            class="chip-pip"></span><span class="chip-label">Information about the champions program is accessible in
+            the organisation</span><span class="chip-status">◑</span></button><button class="chip c1 st-partial"
+          data-qid="q36" data-lv="1"
+          aria-label="Communication channels are actively promoted and champions are onboarded effectively"><span
+            class="chip-pip"></span><span class="chip-label">Communication channels are actively promoted and champions
+            are onboarded effectively</span><span class="chip-status">◑</span></button><button
+          class="chip c1 st-partial" data-qid="q37" data-lv="1"
+          aria-label="Security Champions actively engage in security discussions and or knowledge sharing on colaboration channels"><span
+            class="chip-pip"></span><span class="chip-label">Security Champions actively engage in security discussions
+            and or knowledge sharing on colaboration channels</span><span class="chip-status">◑</span></button></div>
+      <div class="gc gc-m2" data-lv-filter="2"><button class="chip c2 st-partial" data-qid="q38" data-lv="2"
+          aria-label="We have an established community that meets regularly to discuss security information and/or challenges"><span
+            class="chip-pip"></span><span class="chip-label">We have an established community that meets regularly to
+            discuss security information and/or challenges</span><span class="chip-status">◑</span></button><button
+          class="chip c2 st-partial" data-qid="q39" data-lv="2"
+          aria-label="We have an established methodology for volunteers to become security champions"><span
+            class="chip-pip"></span><span class="chip-label">We have an established methodology for volunteers to become
+            security champions</span><span class="chip-status">◑</span></button><button class="chip c2 st-full"
+          data-qid="q40" data-lv="2"
+          aria-label="We have established a structured replacement process for security champions that includes onboarding and knowledge transfer"><span
+            class="chip-pip"></span><span class="chip-label">We have established a structured replacement process for
+            security champions that includes onboarding and knowledge transfer</span><span
+            class="chip-status">✓</span></button><button class="chip c2 st-none" data-qid="q41" data-lv="2"
+          aria-label="Our security champions collaborate with formally accountable security roles"><span
+            class="chip-pip"></span><span class="chip-label">Our security champions collaborate with formally
+            accountable security roles</span><span class="chip-status">✕</span></button><button
+          class="chip c2 st-partial" data-qid="q42" data-lv="2"
+          aria-label="Security champions in our organization are recognized as trusted advisor and points of contact within their scope"><span
+            class="chip-pip"></span><span class="chip-label">Security champions in our organization are recognized as
+            trusted advisor and points of contact within their scope</span><span
+            class="chip-status">◑</span></button><button class="chip c2 st-full" data-qid="q43" data-lv="2"
+          aria-label="We organize regular community events and promote them through official channels"><span
+            class="chip-pip"></span><span class="chip-label">We organize regular community events and promote them
+            through official channels</span><span class="chip-status">✓</span></button><button
+          class="chip c2 st-partial" data-qid="q44" data-lv="2"
+          aria-label="Security champions actively contribute to community events"><span class="chip-pip"></span><span
+            class="chip-label">Security champions actively contribute to community events</span><span
+            class="chip-status">◑</span></button><button class="chip c2 st-partial" data-qid="q45" data-lv="2"
+          aria-label="We maintain a centrally available knowledge base enriched by the security champions community"><span
+            class="chip-pip"></span><span class="chip-label">We maintain a centrally available knowledge base enriched
+            by the security champions community</span><span class="chip-status">◑</span></button><button
+          class="chip c2 st-full" data-qid="q46" data-lv="2"
+          aria-label="Security Champions are able to allocate dedicated time to security activities and training"><span
+            class="chip-pip"></span><span class="chip-label">Security Champions are able to allocate dedicated time to
+            security activities and training</span><span class="chip-status">✓</span></button></div>
+      <div class="gc gc-m3" data-lv-filter="3"><button class="chip c3 st-full" data-qid="q47" data-lv="3"
+          aria-label="We regulary gather feedback to measure engagement of security champions"><span
+            class="chip-pip"></span><span class="chip-label">We regulary gather feedback to measure engagement of
+            security champions</span><span class="chip-status">✓</span></button><button class="chip c3 st-none"
+          data-qid="q48" data-lv="3"
+          aria-label="Security Champions proactively bring up security challenges and issues to the appropriate stakeholders"><span
+            class="chip-pip"></span><span class="chip-label">Security Champions proactively bring up security challenges
+            and issues to the appropriate stakeholders</span><span class="chip-status">✕</span></button><button
+          class="chip c3 st-partial" data-qid="q49" data-lv="3"
+          aria-label="Security champions contribute to security guidelines and best practises in the organization"><span
+            class="chip-pip"></span><span class="chip-label">Security champions contribute to security guidelines and
+            best practises in the organization</span><span class="chip-status">◑</span></button><button
+          class="chip c3 st-none" data-qid="q50" data-lv="3"
+          aria-label="We regularly re-evaluate and adjust the responsibilities and boundaries of our security champions"><span
+            class="chip-pip"></span><span class="chip-label">We regularly re-evaluate and adjust the responsibilities
+            and boundaries of our security champions</span><span class="chip-status">✕</span></button><button
+          class="chip c3 st-partial" data-qid="q51" data-lv="3"
+          aria-label="We have defined metrics to measure community engagement in the champions program"><span
+            class="chip-pip"></span><span class="chip-label">We have defined metrics to measure community engagement in
+            the champions program</span><span class="chip-status">◑</span></button><button class="chip c3 st-partial"
+          data-qid="q52" data-lv="3"
+          aria-label="We regularly review community metrics to drive program improvements"><span
+            class="chip-pip"></span><span class="chip-label">We regularly review community metrics to drive program
+            improvements</span><span class="chip-status">◑</span></button><button class="chip c3 st-partial"
+          data-qid="q53" data-lv="3"
+          aria-label="We regularly collect feedback on community events to improve engagement and impact"><span
+            class="chip-pip"></span><span class="chip-label">We regularly collect feedback on community events to
+            improve engagement and impact</span><span class="chip-status">◑</span></button></div>
+      <div class="rl last-row-rl"
+        style="border-bottom-width: medium; border-bottom-style: none; border-bottom-color: currentcolor;">
+        <div class="rl-icon">🌱</div>
+        <div class="rl-text">
+          <h3>Sustainability &amp; Growth</h3>
+          <p>Recognition, investment &amp; personnel continuity</p>
+        </div>
+      </div>
+      <div class="gc gc-m1" data-lv-filter="1"
+        style="border-bottom-width: medium; border-bottom-style: none; border-bottom-color: currentcolor;"><button
+          class="chip c1 st-none" data-qid="q54" data-lv="1"
+          aria-label="We have drafted ideas for recognizing and rewarding the contributions of security champions"><span
+            class="chip-pip"></span><span class="chip-label">We have drafted ideas for recognizing and rewarding the
+            contributions of security champions</span><span class="chip-status">✕</span></button><button
+          class="chip c1 st-full" data-qid="q55" data-lv="1"
+          aria-label="Training resources are available to support champions&#39; development"><span
+            class="chip-pip"></span><span class="chip-label">Training resources are available to support champions'
+            development</span><span class="chip-status">✓</span></button><button class="chip c1 st-full" data-qid="q56"
+          data-lv="1"
+          aria-label="We maintain a Security Champions register to create visibility across the organization"><span
+            class="chip-pip"></span><span class="chip-label">We maintain a Security Champions register to create
+            visibility across the organization</span><span class="chip-status">✓</span></button><button
+          class="chip c1 st-partial" data-qid="q57" data-lv="1"
+          aria-label="We have developed a process to rotate champions when roles change or individuals leave"><span
+            class="chip-pip"></span><span class="chip-label">We have developed a process to rotate champions when roles
+            change or individuals leave</span><span class="chip-status">◑</span></button></div>
+      <div class="gc gc-m2" data-lv-filter="2"
+        style="border-bottom-width: medium; border-bottom-style: none; border-bottom-color: currentcolor;"><button
+          class="chip c2 st-partial" data-qid="q58" data-lv="2"
+          aria-label="We have defined the resource requirements needed to support our program"><span
+            class="chip-pip"></span><span class="chip-label">We have defined the resource requirements needed to support
+            our program</span><span class="chip-status">◑</span></button><button class="chip c2 st-partial"
+          data-qid="q59" data-lv="2"
+          aria-label="We have defined clear roles and responsibilities within our champions program"><span
+            class="chip-pip"></span><span class="chip-label">We have defined clear roles and responsibilities within our
+            champions program</span><span class="chip-status">◑</span></button><button class="chip c2 st-partial"
+          data-qid="q60" data-lv="2"
+          aria-label="We have implemented comprehensive learning paths tailored to the growth of our security champions"><span
+            class="chip-pip"></span><span class="chip-label">We have implemented comprehensive learning paths tailored
+            to the growth of our security champions</span><span class="chip-status">◑</span></button><button
+          class="chip c2 st-partial" data-qid="q61" data-lv="2"
+          aria-label="We provide (peer) mentoring opportunities to support new security champions"><span
+            class="chip-pip"></span><span class="chip-label">We provide (peer) mentoring opportunities to support new
+            security champions</span><span class="chip-status">◑</span></button><button class="chip c2 st-none"
+          data-qid="q62" data-lv="2"
+          aria-label="We provide growth opportunities and career paths to support long-term champion engagement"><span
+            class="chip-pip"></span><span class="chip-label">We provide growth opportunities and career paths to support
+            long-term champion engagement</span><span class="chip-status">✕</span></button><button
+          class="chip c2 st-full" data-qid="q63" data-lv="2"
+          aria-label="We have established a process to detect changes in champions&#39; status"><span
+            class="chip-pip"></span><span class="chip-label">We have established a process to detect changes in
+            champions' status</span><span class="chip-status">✓</span></button><button class="chip c2 st-none"
+          data-qid="q64" data-lv="2" aria-label="We have developed a succession plan for the captain role"><span
+            class="chip-pip"></span><span class="chip-label">We have developed a succession plan for the captain
+            role</span><span class="chip-status">✕</span></button><button class="chip c2 st-partial" data-qid="q65"
+          data-lv="2"
+          aria-label="We have established a structured reward and recognition program for security champions"><span
+            class="chip-pip"></span><span class="chip-label">We have established a structured reward and recognition
+            program for security champions</span><span class="chip-status">◑</span></button><button
+          class="chip c2 st-partial" data-qid="q66" data-lv="2"
+          aria-label="We have developed feedback mechanisms to measure the effectiveness of our reward system"><span
+            class="chip-pip"></span><span class="chip-label">We have developed feedback mechanisms to measure the
+            effectiveness of our reward system</span><span class="chip-status">◑</span></button><button
+          class="chip c2 st-full" data-qid="q68" data-lv="2"
+          aria-label="We have defined and implemented a process to recognize contributions to the security champions community"><span
+            class="chip-pip"></span><span class="chip-label">We have defined and implemented a process to recognize
+            contributions to the security champions community</span><span class="chip-status">✓</span></button><button
+          class="chip c2 st-none" data-qid="q69" data-lv="2"
+          aria-label="The security champion role is formalized and incorporated into job descriptions"><span
+            class="chip-pip"></span><span class="chip-label">The security champion role is formalized and incorporated
+            into job descriptions</span><span class="chip-status">✕</span></button></div>
+      <div class="gc gc-m3" data-lv-filter="3"
+        style="border-bottom-width: medium; border-bottom-style: none; border-bottom-color: currentcolor;"><button
+          class="chip c3 st-partial" data-qid="q67" data-lv="3"
+          aria-label="We have optimized the reward system to sustain engagement and align with organizational goals"><span
+            class="chip-pip"></span><span class="chip-label">We have optimized the reward system to sustain engagement
+            and align with organizational goals</span><span class="chip-status">◑</span></button><button
+          class="chip c3 st-partial" data-qid="q70" data-lv="3"
+          aria-label="Security champions&#39; knowledge is used to improve policies, processes, and best practises"><span
+            class="chip-pip"></span><span class="chip-label">Security champions' knowledge is used to improve policies,
+            processes, and best practises</span><span class="chip-status">◑</span></button><button
+          class="chip c3 st-partial" data-qid="q71" data-lv="3"
+          aria-label="We continuously refine learning paths based on feedback, industry trends, and organizational goals"><span
+            class="chip-pip"></span><span class="chip-label">We continuously refine learning paths based on feedback,
+            industry trends, and organizational goals</span><span class="chip-status">◑</span></button><button
+          class="chip c3 st-partial" data-qid="q72" data-lv="3"
+          aria-label="We ensure training budgets can be used for relevant champion development opportunities"><span
+            class="chip-pip"></span><span class="chip-label">We ensure training budgets can be used for relevant
+            champion development opportunities</span><span class="chip-status">◑</span></button><button
+          class="chip c3 st-partial" data-qid="q73" data-lv="3"
+          aria-label="We have a defined strategy for allocating and replacing security champions to ensure consistent coverage"><span
+            class="chip-pip"></span><span class="chip-label">We have a defined strategy for allocating and replacing
+            security champions to ensure consistent coverage</span><span class="chip-status">◑</span></button></div>
+    </div>
+  </div>
+
+  <!-- ─── OVERLAY ─── -->
+  <div class="overlay" id="overlay" onclick="closePanel()"></div>
+
+  <!-- ─── PANEL ─── -->
+  <div class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="ph-title">
+    <div class="ph">
+      <div class="ph-crumb" id="ph-crumb"><span>🎯 Strategic Foundations</span>
+        <span class="sep">›</span>
+        <span>Management support (SMS)</span>
+      </div>
+      <div class="ph-top">
+        <h2 class="ph-title" id="ph-title">We have piloted the champions program in parts of the organization</h2>
+        <button class="ph-close" onclick="closePanel()" aria-label="Close panel">✕</button>
+      </div>
+      <div class="ph-tags" id="ph-tags"><span class="tag m1">M1 — Foundational</span>
+        <span class="tag dim">🎯 Strategic Foundations</span>
+        <span class="tag pillar">Management support (SMS)</span>
+      </div>
+    </div>
+    <div class="pb">
+      <div class="ps" id="p-status-section" style="display: block;">
+        <div class="ps-title">Assessment status</div>
+        <div id="p-status"><span class="p-status-badge partial">◑ Partially implemented — room to improve</span></div>
+      </div>
+      <div class="ps">
+        <div class="ps-title">Description</div>
+        <div class="desc-block" id="p-desc">The organization has initiated pilot implementations of the security
+          champions program within specific teams or departments. These pilots serve as a testing ground to validate the
+          program's structure, engagement strategies, and impact before scaling more broadly. Pilots help gather
+          insights, refine the approach, and build momentum through early successes.</div>
+      </div>
+      <div class="ps">
+        <div class="ps-title">Key indicators</div>
+        <div class="indicators" id="p-inds">
+          <div class="ind">
+            <div class="ind-arrow">▸</div><span>Active pilots running in selected areas of the organization,</span>
+          </div>
+          <div class="ind">
+            <div class="ind-arrow">▸</div><span>Defined scope and objectives for each pilot,</span>
+          </div>
+          <div class="ind">
+            <div class="ind-arrow">▸</div><span>Feedback mechanisms in place to evaluate pilot outcomes.</span>
+          </div>
+        </div>
+      </div>
+      <div class="ps">
+        <div class="ps-title">Linked artifacts</div>
+        <div id="p-arts">
+          <div class="art-list"><a
+              href="https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Business%20case.pptx"
+              class="art-card" target="_blank" rel="noopener">
+              <div class="art-ico link">🔗</div>
+              <div class="art-info"><strong>Presentation: Business case for Security Champions</strong><span>SMS no.
+                  1</span></div>
+              <span class="art-ext">Link ↗</span>
+            </a><a
+              href="https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Four%20Approaches%20to%20Security%20Champions%20Programs.pdf"
+              class="art-card" target="_blank" rel="noopener">
+              <div class="art-ico pdf">📎</div>
+              <div class="art-info"><strong>Four Approaches to Security Champions Programs</strong><span>SMS no.
+                  2</span></div>
+              <span class="art-ext"> ↗</span>
+            </a></div>
+        </div>
+      </div>
+    </div>
+    <div class="pf">
+      <button class="pf-btn" id="btn-prev" onclick="navigate(-1)">← Previous</button>
+      <span class="pf-counter" id="pf-counter">4 / 73</span>
+      <button class="pf-btn" id="btn-next" onclick="navigate(1)">Next →</button>
+    </div>
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════
+    //  DATA
+    // ═══════════════════════════════════════════════════════════
+    const DIMS = [
+      { id: 'sf', icon: '🎯', label: 'Strategic Foundations', short: 'Strategic Foundations', desc: 'Vision, management support & leadership' },
+      { id: 'cc', icon: '👥', label: 'Community & Culture', short: 'Community & Culture', desc: 'Passion, trust, community & knowledge sharing' },
+      { id: 'sg', icon: '🌱', label: 'Sustainability & Growth', short: 'Sustainability & Growth', desc: 'Recognition, investment & personnel continuity' }
+    ];
+
+    const PILLARS = {
+      sf: [{ id: 'sav', l: 'Clear vision (SAV)' }, { id: 'sms', l: 'Management support (SMS)' }, { id: 'ndc', l: 'Dedicated captain (NDC)' }, { id: 'tyc', l: 'Trust your champions (TYC)' }],
+      cc: [{ id: 'pas', l: 'Passionate (PAS)' }, { id: 'tyc', l: 'Trust your champions (TYC)' }, { id: 'cco', l: 'Create a community (CC)' }, { id: 'pks', l: 'Knowledge sharing (PKS)' }, { id: 'apc', l: 'Personnel changes (APC)' }],
+      sg: [{ id: 'rr', l: 'Reward responsibility (RR)' }, { id: 'iic', l: 'Invest in champions (IIC)' }, { id: 'apc', l: 'Personnel changes (APC)' }]
+    };
+
+    const Q = [
+      {
+        id: 'q1', dim: 'sf', pillar: 'sav', lv: 1, title: 'We have drafted a vision and a mission for our champions program',
+        desc: 'The organization has taken initial steps to define the vision and mission of the security champions program. These drafts outline the program\'s intended purpose and long-term aspirations, serving as a foundation for further refinement and stakeholder alignment. Drafting these statements helps clarify direction and provides a starting point for strategic planning and communication.',
+        inds: ['A written draft of the program\'s mission and vision,', 'Early stakeholder input or review of the drafts,', 'Use of the drafts to guide initial program decisions and messaging.']
+      },
+      {
+        id: 'q2', dim: 'sf', pillar: 'sav', lv: 1, title: 'We have performed a stakeholder analysis to shape our program vision',
+        desc: 'The organization conducts a deliberate and structured stakeholder analysis to inform the direction and design of the security champions program. This activity helps identify key stakeholders, understand their expectations, and align the program\'s goals with broader organizational priorities. The insights gathered serve as a foundation for building a clear, shared vision and securing stakeholder support.',
+        inds: ['A documented stakeholder map or analysis,', 'Engagement with stakeholders to understand needs and expectations,', 'Program goals and messaging that reflect stakeholder input.']
+      },
+      {
+        id: 'q3', dim: 'sf', pillar: 'sms', lv: 1, title: 'A program advocate has pitched the champions initiative to gain management support',
+        desc: 'The organization has seen an individual—either from within the organization (bottom-up approach) or an individual in leadership (top-down approach)—take initiative to present the case for a security champions program to management. This advocate, plays a key role in securing buy-in, resources, and alignment by clearly communicating the program\'s value.',
+        inds: ['A clear pitch or proposal presented to management,', 'Identified advocate(s) championing the program\'s launch,', 'Management engagement or support initiated as a result of the pitch.']
+      },
+      {
+        id: 'q4', dim: 'sf', pillar: 'sms', lv: 1, title: 'We have piloted the champions program in parts of the organization',
+        desc: 'The organization has initiated pilot implementations of the security champions program within specific teams or departments. These pilots serve as a testing ground to validate the program\'s structure, engagement strategies, and impact before scaling more broadly. Pilots help gather insights, refine the approach, and build momentum through early successes.',
+        inds: ['Active pilots running in selected areas of the organization,', 'Defined scope and objectives for each pilot,', 'Feedback mechanisms in place to evaluate pilot outcomes.']
+      },
+      {
+        id: 'q5', dim: 'sf', pillar: 'sms', lv: 2, title: 'Local management actively supports the champions program within their teams',
+        desc: 'In certain areas of the organization, local or mid-level management has shown active support for the security champions program. This includes encouraging participation, allocating time, and recognizing the value of the initiative.',
+        inds: ['Managers within departments endorsing or enabling champion activities,', 'Time or resources allocated by local leadership,', 'Positive reinforcement or recognition of champions by their direct managers.']
+      },
+      {
+        id: 'q6', dim: 'sf', pillar: 'sms', lv: 1, title: 'We actively raise management awareness to strengthen program support',
+        desc: 'The organization takes deliberate steps to increase management awareness and involvement in the security champions program. This includes encouraging managers to attend meetings, visibly sponsor initiatives, and participate in relevant activities such as security trainings. Building this awareness helps secure ongoing support, reinforces the program\'s importance, and fosters a culture of shared responsibility for security.',
+        inds: ['Managers invited to and participating in program-related meetings or events,', 'Visible sponsorship or endorsement from management,', 'Management engagement in security-related activities alongside champions.']
+      },
+      {
+        id: 'q7', dim: 'sf', pillar: 'ndc', lv: 1, title: 'We have drafted the purpose, scope, and responsibilities for the captain role',
+        desc: 'The organization has taken initial steps to define the captain role within the security champions program. This includes outlining the role\'s purpose, scope of influence, and key responsibilities—such as advocacy, coordination, and program promotion. Drafting this definition helps clarify expectations, supports role onboarding, and ensures alignment with the program\'s goals and organizational context.',
+        inds: ['A written draft describing the captain\'s role, purpose, and responsibilities,', 'Role definition aligned with program needs and organizational structure,', 'Use of the draft in onboarding, communication, or planning activities.']
+      },
+      {
+        id: 'q8', dim: 'sf', pillar: 'sav', lv: 1, title: 'An interim captain is shaping the champions program',
+        desc: 'The organization has someone actively driving the development of the security champions program—either formally appointed or informally stepping into the role. This individual, often referred to as a captain, helps coordinate efforts, advocate for the program, and guide its direction.',
+        inds: ['A person actively coordinating or advocating for the champions program,', 'Program activities being shaped or guided by this individual,', 'Early signs of leadership, even if the role is not yet formally defined.']
+      },
+      {
+        id: 'q9', dim: 'sf', pillar: 'sav', lv: 1, title: 'We have drafted the purpose, scope, and responsibilities for our security champions',
+        desc: 'The organization has taken initial steps to define what it means to be a security champion. This includes drafting the role\'s purpose, scope of influence, and key responsibilities—such as promoting secure practices, acting as a liaison between teams and security, and contributing to awareness efforts. These drafts help set expectations, support onboarding, and lay the foundation for formal role recognition and growth.',
+        inds: ['A written draft outlining the security champion role,', 'Defined responsibilities aligned with program and organizational goals,', 'Use of the draft in onboarding, communication, or role clarification.']
+      },
+      {
+        id: 'q10', dim: 'sf', pillar: 'sav', lv: 1, title: 'We have drafted the appointment process and criteria for security champions',
+        desc: 'The organization has outlined an initial approach for appointing security champions, including basic criteria for selection. This may involve defining eligibility based on role, interest, or expertise, and establishing a process for volunteering, nomination, or approval.',
+        inds: ['A documented draft of how champions are selected,', 'Defined criteria such as team representation, skillset, or interest,', 'Use of the draft to guide onboarding or communication about the role.']
+      },
+      {
+        id: 'q11', dim: 'sf', pillar: 'sav', lv: 2, title: 'We incorporated lessons learned from pre-existing initiatives to inform our program design',
+        desc: 'The organization takes a structured approach to reviewing past or parallel initiatives that relate to security awareness, champion networks, or cultural change. This reflection helps identify what worked well, what challenges were encountered, and how those insights can be applied to shape a more effective and sustainable security champions program. It ensures the program builds on existing knowledge rather than starting from scratch.',
+        inds: ['A documented review or retrospective of relevant past initiatives,', 'Identified lessons that influence current program decisions,', 'Evidence of continuity or improvement based on historical insights.']
+      },
+      {
+        id: 'q12', dim: 'sf', pillar: 'sav', lv: 2, title: 'We have identified and communicated the benefits and business value of our security champions program',
+        desc: 'The organization takes a structured approach to understanding and articulating the benefits and business value of the security champions program. This includes aligning the program\'s outcomes with organizational goals such as risk reduction, cultural change, and improved collaboration. Clearly communicating this value helps secure stakeholder buy-in, sustain long-term support, and position the program as a strategic enabler.',
+        inds: ['Documented benefits that link the program to business or security objectives,', 'Messaging that communicates value to stakeholders at different levels,', 'Evidence that the program is recognized as contributing to broader organizational success.']
+      },
+      {
+        id: 'q13', dim: 'sf', pillar: 'sav', lv: 2, title: 'We have identified key security focus areas to guide our champions program',
+        desc: 'The organization takes a structured approach to identifying the most relevant security challenges and improvement opportunities that the champions program should address. These focus areas are informed by organizational risk profiles, stakeholder input, and lessons from past initiatives. By aligning the program with tangible security needs, champions can contribute meaningfully and drive targeted impact.',
+        inds: ['A documented list of prioritized security topics or challenges,', 'Input from stakeholders or data sources guiding the focus areas,', 'Champions activities aligned with identified improvement opportunities.']
+      },
+      {
+        id: 'q14', dim: 'sf', pillar: 'sav', lv: 2, title: 'Our stakeholders are identified and aligned with the program\'s purpose, mission, and vision',
+        desc: 'The organization has actively engaged stakeholders to build a shared understanding of the security champions program\'s purpose, mission, and long-term vision. This alignment ensures that the program is supported across levels, resonates with organizational goals, and benefits from consistent messaging and strategic backing. Stakeholder buy-in is foundational to the program\'s success and sustainability.',
+        inds: ['Documented program purpose, mission, and vision statements,', 'Evidence of stakeholder engagement and endorsement,', 'Consistent messaging and support across departments or leadership levels.']
+      },
+      {
+        id: 'q15', dim: 'sf', pillar: 'sav', lv: 2, title: 'We have defined the resource requirements needed to support our program',
+        desc: 'The organization takes a structured approach to identifying the resources required to successfully launch and sustain the security champions program. This includes assessing time commitments, budget, tooling, and support from leadership. Clearly defining these needs ensures the program is realistic, scalable, and adequately supported from the start.',
+        inds: ['A documented overview of required resources (e.g., time, budget, tools),', 'Resource planning aligned with program goals and scale,', 'Leadership awareness and support for resource allocation.']
+      },
+      {
+        id: 'q16', dim: 'sf', pillar: 'sav', lv: 2, title: 'We have defined clear roles and responsibilities within our champions program',
+        desc: 'The organization has established well-defined roles and responsibilities for all participants in the security champions program. This clarity ensures that champions, coordinators, and supporting stakeholders understand their contributions, expectations, and how they collaborate. Role definition supports accountability, consistency, and effective program execution.',
+        inds: ['Documented role descriptions for champions and program leads,', 'Clear expectations communicated during onboarding or training,', 'Evidence of role-based activities and responsibilities in practice.']
+      },
+      {
+        id: 'q17', dim: 'sf', pillar: 'sav', lv: 2, title: 'We have an approved a program charter with support from our decision makers in the organization',
+        desc: 'The organization has developed a formal program charter that outlines the purpose, scope, goals, and governance of the security champions program. This charter is reviewed and approved by a relevant leadership body, ensuring strategic alignment and long-term commitment. The charter serves as a foundational document that guides decision-making and communicates the program\'s intent across the organization.',
+        inds: ['A documented and approved program charter,', 'Leadershp involvement in reviewing and endorsing the charter,', 'Charter used as a reference point for program planning and communication.']
+      },
+      {
+        id: 'q18', dim: 'sf', pillar: 'sav', lv: 2, title: 'We have appointed a dedicated captain for our champions program',
+        desc: 'The organization has formally assigned a dedicated captain as the program lead to oversee the design, implementation, and ongoing management of the security champions program. This individual serves as the central point of coordination, ensuring strategic alignment, stakeholder engagement, and operational consistency. Having a dedicated lead reinforces accountability and supports program sustainability.',
+        inds: ['A named individual responsible for the champions program,', 'Clear responsibilities and authority assigned to the program lead,', 'Evidence of active coordination and leadership in program activities.']
+      },
+      {
+        id: 'q19', dim: 'sf', pillar: 'sav', lv: 2, title: 'We have translated our program vision into clear goals and SMART objectives',
+        desc: 'The organization has taken a structured approach to breaking down the champions program\'s vision into actionable goals and SMART (Specific, Measurable, Achievable, Relevant, Time-bound) objectives. This ensures clarity of purpose, enables progress tracking, and supports alignment across teams. Well-defined goals and objectives help guide decision-making and demonstrate the program\'s impact over time.',
+        inds: ['Documented goals that reflect the program\'s vision,', 'SMART objectives linked to each goal,', 'Use of goals and objectives in planning, reporting, or stakeholder communication.']
+      },
+      {
+        id: 'q20', dim: 'sf', pillar: 'sav', lv: 2, title: 'We regularly review our program\'s mission and vision to ensure alignment with business objectives',
+        desc: 'The organization has established a recurring process to review and, if needed, refine the mission and vision of the security champions program. This ensures that the program remains aligned with evolving business goals, strategic priorities, and organizational context. Regular reviews help maintain relevance, reinforce stakeholder support, and guide meaningful program evolution.',
+        inds: ['A scheduled cadence for reviewing the program\'s mission and vision,', 'Input from stakeholders or leadership during review cycles,', 'Updates made to reflect changes in business strategy or priorities.']
+      },
+      {
+        id: 'q21', dim: 'sf', pillar: 'sms', lv: 2, title: 'We have defined a program that aligns with organizational goals',
+        desc: 'The organization has established clear requirements for the structure and scale of the security champions program. These may include ratios such as one champion per 10, 20, ... 50 developers for instance, or coverage models like one champion per key security topic. These requirements are intentionally designed to reflect the organization\'s risk landscape, operational needs, and strategic objectives, ensuring the program is both purposeful, effect',
+        inds: ['Documented program requirements (e.g., champion-to-developer ratios, topic coverage),', 'Alignment between requirements and organizational goals or risk priorities,', 'Regular review of requirements to ensure continued relevance and effectiveness.']
+      },
+      {
+        id: 'q22', dim: 'sf', pillar: 'ndc', lv: 2, title: 'We have formalized the captain role with a defined scope, responsibilities, and requirements',
+        desc: 'The organization has developed a formal job description for the captain role within the security champions program. This includes a clear definition of the role\'s purpose, scope of influence, key responsibilities, and required competencies. Formalizing the role ensures consistency, supports onboarding, and reinforces the captain\'s position as a recognized leader within the program.',
+        inds: ['A documented job description outlining the captain\'s role,', 'Defined responsibilities and expectations aligned with program goals,', 'Role requirements such as skills, experience, or time commitment clearly stated.']
+      },
+      {
+        id: 'q23', dim: 'sf', pillar: 'sav', lv: 2, title: 'Security champions are given a clear scope of responsibility',
+        desc: 'The organization ensures that each security champion understands their role and scope within the program. This can be assigning them to specific teams or given defined areas of focus—such as a particular security topic, domain, or cross-functional initiative. This clarity supports autonomy, encourages ownership, and enables champions to contribute effectively within their area of influence.',
+        inds: ['Champions briefed on their scope and responsibilities (upon onboarding),', 'Defined areas of focus such as teams, topics, domains, or strategic initiatives,', 'Champions actively contributing within their assigned scope.']
+      },
+      {
+        id: 'q24', dim: 'sf', pillar: 'sav', lv: 3, title: 'We use feedback of security champions to optimize our security champions program in a structured way',
+        desc: 'The organization has established a deliberate and structured approach to process feedback from security champions to evolve and enhance the program. This feedback is systematically reviewed and translated into actionable improvements, ensuring the program remains relevant, effective, and aligned with the needs of its participants. Adjustments may include refining training, improving communication channels, or reshaping engagement strategies.',
+        inds: ['A clear process for analyzing feedback and identifying improvement opportunities,', 'Documented changes or enhancements made based on champion input,', 'Ongoing iteration of the program informed by feedback trends and insights.']
+      },
+      {
+        id: 'q25', dim: 'sf', pillar: 'sav', lv: 3, title: 'We track and regularly report on performance against program goals and objectives',
+        desc: 'The organization has established a structured process for monitoring progress toward the security champions program\'s goals and SMART objectives. Performance data is collected, reviewed, and shared at regular intervals to ensure transparency, accountability, and continuous improvement. This practice helps demonstrate impact, inform decision-making, and maintain stakeholder engagement.',
+        inds: ['Defined metrics linked to program goals and objectives,', 'Regular reporting cycles (e.g., monthly, quarterly) with shared insights,', 'Evidence of program adjustments based on performance data.']
+      },
+      {
+        id: 'q26', dim: 'sf', pillar: 'sav', lv: 3, title: 'We automate the gathering and reporting of the programs SMART objectives',
+        desc: 'The organization has implemented automated processes to collect and report on key metrics related to the security champions program. This reduces manual effort, ensures consistency, and enables timely insights into program performance. Automation supports scalability and allows stakeholders to access up-to-date data for informed decision-making and continuous improvement.',
+        inds: ['Tools or systems in place that automatically collect relevant program data,', 'Dashboards or reports generated on a regular schedule without manual input,', 'Metrics used actively in program reviews and decision-making.']
+      },
+      {
+        id: 'q27', dim: 'sf', pillar: 'sms', lv: 3, title: 'Our champions program is formally integrated into the information security program and aligned with business objectives',
+        desc: 'The organization has formally embedded the security champions program within its broader information security strategy. This integration ensures that the program is not a standalone initiative but a recognized component of the organization\'s security posture. The program\'s goals and activities are aligned with business objectives, enabling champions to contribute to meaningful outcomes such as risk reduction, compliance, and cultural change.',
+        inds: ['The champions program referenced in official security documentation or governance frameworks,', 'Program goals mapped to business and security objectives,', 'Champions contributing to recognized security initiatives or KPIs.']
+      },
+      {
+        id: 'q28', dim: 'sf', pillar: 'ndc', lv: 3, title: 'The captain role is standardized and has documented  tasks and responsibilities through e.g. playbooks or role description',
+        desc: 'The organization supports the captain in formalizing their role by creating and maintaining playbooks that outline key responsibilities, workflows, and best practices. These playbooks serve as a reference for consistent execution, onboarding, and scaling the program. By documenting the captain\'s activities, the program gains structure, repeatability, and resilience across teams and time.',
+        inds: ['Playbooks or guides created by or for the captain role,', 'Standardized approaches to recurring tasks and responsibilities (by means of a role description),', 'Use of playbooks in onboarding, training, or program coordination']
+      },
+      {
+        id: 'q29', dim: 'sf', pillar: 'ndc', lv: 3, title: 'We define, measure, and regularly review success metrics for the captain role',
+        desc: 'The organization has established clear success metrics to evaluate the effectiveness of the captain within the security champions program. These metrics reflect the captain\'s responsibilities—such as engagement levels, program growth, and alignment with SMART objectives—and are reviewed regularly to ensure continued relevance and performance. This structured approach supports accountability, development, and strategic alignment.',
+        inds: ['Documented success metrics specific to the captain\'s role,', 'Regular measurement and reporting of performance against these metrics,', 'Metrics used to guide role development and program improvements.']
+      },
+      {
+        id: 'q30', dim: 'sf', pillar: 'sav', lv: 3, title: 'Security champions are empowered to make independent, risk-based decisions within defined boundaries',
+        desc: 'The organization trusts its security champions to make informed, risk-based decisions relevant to their scope of responsibility. Clear boundaries and guardrails are established to guide their autonomy, ensuring decisions align with organizational policies and risk tolerance. This empowerment fosters ownership, accelerates decision-making, and strengthens the champions\' role as proactive contributors to secure practices.',
+        inds: ['Champions making decisions independently within their defined scope,', 'Documented boundaries or decision-making guidelines,', 'Support from security teams and leadership for champion-led actions.']
+      },
+      {
+        id: 'q31', dim: 'cc', pillar: 'pas', lv: 1, title: 'Informal gathering of a community to discuss security topics',
+        desc: 'A few individuals—typically those with a natural interest in security—start connecting to share security-related challenges, ideas, or resources. These interactions are usually unstructured, spontaneous, and not yet formally recognized by the organization.',
+        inds: ['Regularly discuss security topics in team chats or meetings,', 'Share lessons learned,', 'Raise security concerns or best practices informally.']
+      },
+      {
+        id: 'q32', dim: 'cc', pillar: 'pas', lv: 1, title: 'A few individuals or teams are posting security information on internal collaboration channels',
+        desc: 'Teams begin to share security-related content—such as best practices, alerts, or lessons learned—on internal collaboration platforms (e.g., Slack, Microsoft Teams, Confluence). These posts are typically informal and initiated by individuals or teams with a growing interest in security.',
+        inds: ['Security-related posts in team channels or knowledge bases,', 'Informal sharing of articles, checklists, or incident summaries,', 'Team members tagging others in security discussions or asking questions.']
+      },
+      {
+        id: 'q33', dim: 'cc', pillar: 'pas', lv: 1, title: 'A few individuals or teams have started to engage with the security department and/or security management on security topics and/or challenges in their field',
+        desc: 'A small group of motivated individuals begins to establish a connection with the organization\'s formal security function and /or security security leadership. These early champions may not yet have formal roles, but they actively seek input, share team-level insights, and express interest in aligning with broader security goals.',
+        inds: ['A few individuals regularly communicating with the security team,', 'Informal feedback loops establising between teams and formal security functions/roles,', 'Champions being invited to or initiating discussions with formal security functions/roles.']
+      },
+      {
+        id: 'q34', dim: 'cc', pillar: 'cco', lv: 1, title: 'There are established communication and collaboration channels for security champions',
+        desc: 'The organization has identified and set up dedicated channels to enable effective communication and collaboration among security champions and between champions and other stakeholders. These channels—such as chat groups, mailing lists, shared platforms, or regular syncs—facilitate knowledge sharing, coordination, and peer support.',
+        inds: ['Defined tools or platforms used for champion communication (e.g., Slack, Teams, Confluence),', 'Regular opportunities for collaboration such as meetings, forums, or shared documents,', 'Champions actively engaging through these channels to share insights and coordinate efforts.']
+      },
+      {
+        id: 'q35', dim: 'cc', pillar: 'cco', lv: 1, title: 'Information about the champions program is accessible in the organisation',
+        desc: 'The organization ensures that key information about the security champions program—such as its purpose, structure, roles, and activities—is clearly documented and made available.',
+        inds: ['Program details published in accessible locations (e.g., intranet, wiki, internal newsletters),', 'Champions and stakeholders able to reference program materials independently,', 'Increased awareness and understanding of the program across the organization.']
+      },
+      {
+        id: 'q36', dim: 'cc', pillar: 'cco', lv: 1, title: 'Communication channels are actively promoted and champions are onboarded effectively',
+        desc: 'The organization ensures that security champions are introduced to the program through a structured onboarding process and are made aware of the communication and collaboration channels available to them. These channels are actively promoted to encourage engagement, knowledge sharing, and peer support. Effective onboarding and visibility of communication tools help champions integrate quickly and contribute confidently.',
+        inds: ['Champions receive onboarding materials or sessions that include program overview and role expectations,', 'Communication channels (e.g., chat groups, forums, shared docs) are actively promoted and accessible,', 'Champions begin engaging with the community shortly after onboarding.']
+      },
+      {
+        id: 'q37', dim: 'cc', pillar: 'cco', lv: 1, title: 'Security Champions actively engage in security discussions and or knowledge sharing on colaboration channels',
+        desc: 'Security champions regularly participate in conversations and share insights through established collaboration channels such as chat platforms, forums, or shared documentation spaces. Their active involvement helps foster a culture of continuous learning, peer support, and open dialogue around security topics. This engagement strengthens the community and ensures that security remains a visible and integrated part of everyday work.',
+        inds: ['Champions contributing to discussions in dedicated communication channels,', 'Sharing of resources, experiences, or best practices by champions,', 'Ongoing dialogue that supports learning and problem-solving across teams.']
+      },
+      {
+        id: 'q38', dim: 'cc', pillar: 'pas', lv: 2, title: 'We have an established community that meets regularly to discuss security information and/or challenges',
+        desc: 'The organization has cultivated a recognized and active community of champions who meet on a regular basis. These meetings are structured, recurring, and focused on sharing knowledge, aligning on security practices, and driving improvement across teams.',
+        inds: ['A defined group of champions who meet on a regular basis,', 'Regular agendas, shared notes, or presentations during meetings,', 'Active participation and peer learning among champions.']
+      },
+      {
+        id: 'q39', dim: 'cc', pillar: 'pas', lv: 2, title: 'We have an established methodology for volunteers to become security champions',
+        desc: 'The organization has implemented a clear and structured process that enables individuals to voluntarily step into the role of security champion. Participation is based on genuine interest and motivation, not obligation. This approach ensures that champions are engaged and committed, and that their involvement is supported by transparent criteria, communication, and onboarding practices.',
+        inds: ['A documented and accessible process for volunteering as a security champion,', 'Champions who have opted in based on interest, not assignment,', 'Communication that encourages voluntary participation and highlights the value of the role.']
+      },
+      {
+        id: 'q40', dim: 'cc', pillar: 'pks', lv: 2, title: 'We have established a structured replacement process for security champions that includes onboarding and knowledge transfer',
+        desc: 'The organization has implemented a formal process to replace security champions when they leave, change roles, or step down from the program. This process includes identifying a suitable successor, facilitating a smooth handover, and onboarding the new champion with relevant context and resources. Structured knowledge transfer ensures continuity, preserves program insights, and minimizes disruption to team-level security engagement.',
+        inds: ['A documented process for replacing champions, including selection and onboarding steps,', 'Knowledge transfer practices such as handover notes, meetings, or shared documentation,', 'New champions onboarded with clarity on their scope, responsibilities, and available resources.']
+      },
+      {
+        id: 'q41', dim: 'cc', pillar: 'tyc', lv: 2, title: 'Our security champions collaborate with formally accountable security roles',
+        desc: 'The organization fosters active collaboration between security champions and those formally responsible for security, such as security officers, engineers, or governance leads. This partnership ensures that champions are aligned with organizational security priorities and can contribute meaningfully to initiatives. Collaboration may include joint activities, shared goals, and regular communication, strengthening both grassroots engagement and for',
+        inds: ['Champions working alongside formal security roles on initiatives or projects,', 'Regular communication or coordination between champions and security teams,', 'Shared understanding of responsibilities and mutual support in driving security outcomes.']
+      },
+      {
+        id: 'q42', dim: 'cc', pillar: 'tyc', lv: 2, title: 'Security champions in our organization are recognized as trusted advisor and points of contact within their scope',
+        desc: 'The organization acknowledges security champions as knowledgeable and reliable contributors within their defined areas of responsibility. They are seen by their peers as the go-to contacts for security-related questions, and they actively help address security topics in day-to-day work. This recognition reflects both their expertise and the trust placed in them by their teams, reinforcing their role as key enablers of secure practices.',
+        inds: ['Champions consulted by peers for security-related guidance or decisions,', 'Champions actively contributing to resolving or escalating security topics,', 'Teams recognizing and relying on champions as part of their security culture.']
+      },
+      {
+        id: 'q43', dim: 'cc', pillar: 'cco', lv: 2, title: 'We organize regular community events and promote them through official channels',
+        desc: 'The organization hosts recurring events—such as meetups, knowledge-sharing sessions, or themed discussions—to bring the security champions community together. These events are communicated through established internal channels to ensure visibility and encourage participation. Regular gatherings help strengthen the community, foster collaboration, and maintain engagement across teams.',
+        inds: ['A calendar or cadence of recurring community events,', 'Events promoted through official communication channels (e.g., newsletters, intranet, chat),', 'Active participation and feedback from champions and stakeholders.']
+      },
+      {
+        id: 'q44', dim: 'cc', pillar: 'tyc', lv: 2, title: 'Security champions actively contribute to community events',
+        desc: 'Security champions play an active role in organizing, presenting, or supporting community events related to security. Their contributions may include sharing insights, leading discussions, facilitating workshops, or helping coordinate logistics. This involvement strengthens the community, promotes peer learning, and reinforces the champions\' position as engaged and trusted members of the organization\'s security culture.',
+        inds: ['Champions presenting or facilitating sessions during community events,', 'Champions helping organize or promote security-related gatherings,', 'Visible champion participation that encourages broader team engagement.']
+      },
+      {
+        id: 'q45', dim: 'cc', pillar: 'tyc', lv: 2, title: 'We maintain a centrally available knowledge base enriched by the security champions community',
+        desc: 'The organization has established a central knowledge base that serves as a living repository for security-related information, best practices, and program resources. This platform is continuously updated with contributions from both security professionals and champions, ensuring the content remains relevant, practical, and reflective of real-world experience. The knowledge base supports self-service learning, cross-team collaboration, and long-te',
+        inds: ['A centralized platform accessible to all champions and stakeholders,', 'Regular contributions from both security experts and community members,', 'Content covering practical guidance, role-specific insights, and evolving security topics.']
+      },
+      {
+        id: 'q46', dim: 'cc', pillar: 'tyc', lv: 2, title: 'Security Champions are able to allocate dedicated time to security activities and training',
+        desc: 'The organization actively supports security champions by allocating dedicated time for their training, learning, and participation in program activities. This includes attending workshops, contributing to security initiatives, and engaging in community events. Managerial support reinforces the importance of the role and enables champions to grow their expertise without compromising their core responsibilities.',
+        inds: ['Champions given time during work hours for training and program participation,', 'Managers encouraging involvement in learning and community activities,', 'Security-related tasks recognized as part of the champion\'s role, not additional workload.']
+      },
+      {
+        id: 'q47', dim: 'cc', pillar: 'pas', lv: 3, title: 'We regulary gather feedback to measure engagement of security champions',
+        desc: 'The organization has embedded a feedback loop to continuously assess the engagement, effectiveness and motivation of its security champions. This process is intentional, recurring, and designed to surface insights that help improve the champions program. Feedback is collected through structured formats such as surveys, interviews, or retrospectives, and is used to inform program adjustments and recognize areas of success or concern.',
+        inds: ['A defined cadence for collecting feedback from security champions,', 'Use of structured tools or formats (e.g., surveys, feedback forms, interviews),', 'Evidence that feedback is reviewed and acted upon to evolve the program.']
+      },
+      {
+        id: 'q48', dim: 'cc', pillar: 'tyc', lv: 3, title: 'Security Champions proactively bring up security challenges and issues to the appropriate stakeholders',
+        desc: 'The organization empowers security champions to actively identify and escalate security challenges or concerns within their scope. Champions take initiative to bring issues to the attention of relevant stakeholders—such as team leads, product owners, or security teams—ensuring that risks are addressed in a timely and appropriate manner. This proactive behavior strengthens the organization\'s security posture and reinforces the champions\' role as t',
+        inds: ['Champions regularly surface security concerns or improvement opportunities,', 'Issues are communicated to appropriate stakeholders for resolution,', 'Champions are recognized for their role in maintaining and improving security awareness.']
+      },
+      {
+        id: 'q49', dim: 'cc', pillar: 'tyc', lv: 3, title: 'Security champions contribute to security guidelines and best practises in the organization',
+        desc: 'Security champions actively support the creation and refinement of organizational security guidelines (in line with formal procedures and policy), including secure coding practices or security best practises based on the technologies used within their teams. Their input ensures that guidance is practical, relevant, and aligned with real-world development environments. By leveraging their technical expertise and contextual knowledge, champions hel',
+        inds: ['Champions involved in drafting or reviewing security guidelines,', 'Guidelines tailored to specific technologies, frameworks, or languages used in the organization.']
+      },
+      {
+        id: 'q50', dim: 'cc', pillar: 'tyc', lv: 3, title: 'We regularly re-evaluate and adjust the responsibilities and boundaries of our security champions',
+        desc: 'The organization has established a process to periodically review and refine the responsibilities and boundaries of the security champion role. This ensures the role remains relevant, aligned with evolving business and security needs, and manageable for those involved. Regular adjustments help maintain clarity, support champions in their work, and reinforce trust in their contributions.',
+        inds: ['Scheduled reviews of the champion role and scope,', 'Updates made based on feedback, program maturity, or organizational changes,', 'Champions and stakeholders aligned on any changes to responsibilities or boundaries.']
+      },
+      {
+        id: 'q51', dim: 'cc', pillar: 'cco', lv: 3, title: 'We have defined metrics to measure community engagement in the champions program',
+        desc: 'The organization has identified specific metrics to assess how actively the security champions community is engaging with the program. These metrics may include participation in discussions, attendance at events, contributions to shared resources, or feedback activity. Defining engagement metrics helps track progress, identify areas for improvement, and demonstrate the value of the community\'s involvement.',
+        inds: ['Documented metrics that reflect community participation and interaction,', 'Tools or processes in place to collect and review engagement data,']
+      },
+      {
+        id: 'q52', dim: 'cc', pillar: 'cco', lv: 3, title: 'We regularly review community metrics to drive program improvements',
+        desc: 'The organization has established a process to collect and analyze metrics related to community engagement, participation, and impact within the security champions program. These metrics are reviewed at regular intervals to identify trends, gaps, and opportunities for improvement. This data-driven approach ensures the program evolves in response to real-world feedback and continues to meet the needs of its participants and stakeholders.',
+        inds: ['Defined metrics tracking community engagement (e.g., participation rates, contributions, activity levels),', 'Regular reviews of metric data to assess program health,', 'Adjustments made to program activities or strategy based on insights from metrics.']
+      },
+      {
+        id: 'q53', dim: 'cc', pillar: 'tyc', lv: 3, title: 'We regularly collect feedback on community events to improve engagement and impact',
+        desc: 'The organization has implemented a process to gather feedback from participants after community events such as meetups, workshops, or knowledge-sharing sessions. This feedback helps assess the relevance, quality, and effectiveness of the events, and is used to continuously improve future activities. Regular feedback collection ensures the community\'s voice is heard and that events remain valuable and engaging.',
+        inds: ['Feedback forms or surveys shared after events,', 'Insights from feedback reviewed and used to adjust future event formats or topics,', 'Champions and participants feel their input is valued and acted upon.']
+      },
+      {
+        id: 'q54', dim: 'sg', pillar: 'rr', lv: 1, title: 'We have drafted ideas for recognizing and rewarding the contributions of security champions',
+        desc: 'The organization has outlined initial concepts for a system that acknowledges the efforts and impact of security champions. These ideas may include informal recognition (e.g., shout-outs, badges), formal rewards (e.g., certificates, development opportunities), or visibility in internal communications. Drafting these concepts helps build a culture of appreciation, motivates continued engagement, and reinforces the value of champion contributions.',
+        inds: ['A list of potential recognition and reward mechanisms,', 'Consideration of both informal and formal approaches,', 'Plans to align recognition with contribution types and organizational values.']
+      },
+      {
+        id: 'q55', dim: 'sg', pillar: 'iic', lv: 1, title: 'Training resources are available to support champions\' development',
+        desc: 'The organization has made a selection of foundational training materials available to help security champions begin their learning journey. While not yet structured into formal learning paths, these resources provide guidance on key security topics and role expectations. This early-stage support helps champions build awareness and start developing the skills needed to contribute effectively.',
+        inds: ['A curated set of introductory resources accessible to champions,', 'Coverage of basic security concepts and role-specific guidance,', 'Champions using these materials to begin their development.']
+      },
+      {
+        id: 'q56', dim: 'sg', pillar: 'apc', lv: 1, title: 'We maintain a Security Champions register to create visibility across the organization',
+        desc: 'The organization has established a centralized register that lists all active security champions, along with relevant details such as their scope, team affiliation, and contact information. This register helps ensure visibility, continuity, and accountability—especially during personnel changes—by making it easy to identify who is involved, where coverage exists, and where gaps may emerge.',
+        inds: ['A maintained and accessible register of current security champions,', 'Champion details such as name, role, scope, and team affiliation included,', 'The register used to support onboarding, transitions, and program coordination.']
+      },
+      {
+        id: 'q57', dim: 'sg', pillar: 'apc', lv: 1, title: 'We have developed a process to rotate champions when roles change or individuals leave',
+        desc: 'The organization has established a structured process to manage transitions when security champions leave the organization, change roles, or can no longer fulfill their responsibilities. This process includes criteria for identifying when rotation is needed, clear handover procedures, and onboarding support for incoming champions. It ensures continuity, preserves program knowledge, and maintains coverage across teams despite personnel changes.',
+        inds: ['A documented process for rotating champions due to role changes or departures,', 'Smooth handovers supported by guidance or templates,', 'New champions onboarded promptly to maintain program momentum.']
+      },
+      {
+        id: 'q58', dim: 'sg', pillar: 'rr', lv: 2, title: 'We have defined the resource requirements needed to support our program',
+        desc: 'The organization takes a structured approach to identifying the resources required to successfully launch and sustain the security champions program. This includes assessing time commitments, budget, tooling, and support from leadership. Clearly defining these needs ensures the program is realistic, scalable, and adequately supported from the start.',
+        inds: ['A documented overview of required resources (e.g., time, budget, tools),', 'Resource planning aligned with program goals and scale,', 'Leadership awareness and support for resource allocation.']
+      },
+      {
+        id: 'q59', dim: 'sg', pillar: 'apc', lv: 2, title: 'We have defined clear roles and responsibilities within our champions program',
+        desc: 'The organization has established well-defined roles and responsibilities for all participants in the security champions program. This clarity ensures that champions, coordinators, and supporting stakeholders understand their contributions, expectations, and how they collaborate. Role definition supports accountability, consistency, and effective program execution.',
+        inds: ['Documented role descriptions for champions and program leads,', 'Clear expectations communicated during onboarding or training,', 'Evidence of role-based activities and responsibilities in practice.']
+      },
+      {
+        id: 'q60', dim: 'sg', pillar: 'rr', lv: 2, title: 'We have implemented comprehensive learning paths tailored to the growth of our security champions',
+        desc: 'The organization has developed structured and role-specific learning paths to support the continuous development of security champions. These paths cover foundational and advanced topics—such as secure coding, threat modeling, risk management, and communication skills—and are aligned with the champions\' responsibilities and the organization\'s security goals. The learning paths are designed to be progressive, flexible, and accessible, enabling cha',
+        inds: ['Documented learning paths or curricula tailored to champion roles and experience levels,', 'Training resources aligned with organizational security priorities and technologies,', 'Champions actively engaging with learning materials and progressing through development stages.']
+      },
+      {
+        id: 'q61', dim: 'sg', pillar: 'rr', lv: 2, title: 'We provide (peer) mentoring opportunities to support new security champions',
+        desc: 'The organization has established mentoring opportunities to help new security champions build confidence, develop skills, and integrate into the community. Experienced champions or security professionals provide guidance, share practical insights, and offer support during the early stages of a champion\'s journey. Mentoring strengthens peer connections, accelerates learning, and fosters a culture of collaboration and continuous improvement.',
+        inds: ['New champions paired with experienced mentors or advisors,', 'Regular check-ins or informal support sessions between mentors and mentees,']
+      },
+      {
+        id: 'q62', dim: 'sg', pillar: 'rr', lv: 2, title: 'We provide growth opportunities and career paths to support long-term champion engagement',
+        desc: 'The organization has outlined potential growth paths and development opportunities for security champions to recognize their contributions and support long-term retention. These may include advanced training, leadership roles within the program, involvement in strategic initiatives, or formal career progression into security-related positions.',
+        inds: ['Documented growth paths or development opportunities for champions,', 'Champions progressing into advanced roles or security-focused career tracks,', 'Recognition of champion experience in performance reviews or career planning.']
+      },
+      {
+        id: 'q63', dim: 'sg', pillar: 'apc', lv: 2, title: 'We have established a process to detect changes in champions\' status',
+        desc: 'The organization has implemented a process to monitor and respond to changes in the status of security champions—such as role transitions, departures, or availability changes. This process may be integrated with HR systems, team updates, or program check-ins to ensure timely updates to the champions register and continuity of coverage. Proactively detecting changes helps maintain program stability and ensures responsibilities are reassigned when ',
+        inds: ['Integration with HR or team management systems to track role changes,', 'Regular check-ins', 'Automated alerts to identify status updates,', 'Champions register updated promptly to reflect current participation.']
+      },
+      {
+        id: 'q64', dim: 'sg', pillar: 'apc', lv: 2, title: 'We have developed a succession plan for the captain role',
+        desc: 'The organization has created a clear succession plan to ensure continuity in the captain role when transitions occur. This plan outlines how potential successors are identified, how knowledge transfer is managed, and how new captains are onboarded. Having a defined approach minimizes disruption, preserves program leadership, and ensures the ongoing success of the security champions initiative.',
+        inds: ['A documented process for identifying and preparing future captains,', 'Knowledge transfer and onboarding steps included in the plan,', 'Clear criteria for selecting a successor aligned with program needs.']
+      },
+      {
+        id: 'q65', dim: 'sg', pillar: 'iic', lv: 2, title: 'We have established a structured reward and recognition program for security champions',
+        desc: 'The organization has implemented a formal program to recognize and reward the contributions of security champions. This program includes clear criteria, consistent processes, and a variety of recognition methods—ranging from public appreciation and digital badges to professional development opportunities and performance-based (monetary) rewards. The structure ensures fairness, transparency, and alignment with organizational values, while reinforc',
+        inds: ['A documented recognition and reward framework with defined criteria,', 'Fundning available dedicated for rewarding Champions,', 'Regular recognition of champions through formal and informal channels,', 'Rewards that reflect meaningful contributions and support continued engagement.']
+      },
+      {
+        id: 'q66', dim: 'sg', pillar: 'rr', lv: 2, title: 'We have developed feedback mechanisms to measure the effectiveness of our reward system',
+        desc: 'The organization has implemented structured feedback mechanisms to evaluate how well the reward and recognition system supports and motivates security champions. These mechanisms may include surveys, interviews, or performance reviews, and are designed to capture champion sentiment, perceived fairness, and impact on engagement. Regular feedback helps ensure the system remains relevant, equitable, and aligned with the program\'s goals.',
+        inds: ['Feedback tools (e.g., surveys, forms, interviews) focused on the reward system,', 'Regular review of feedback to assess effectiveness and identify improvements,', 'Adjustments made to the recognition approach based on champion input.']
+      },
+      {
+        id: 'q67', dim: 'sg', pillar: 'rr', lv: 3, title: 'We have optimized the reward system to sustain engagement and align with organizational goals',
+        desc: 'The organization continuously improves its reward and recognition system to ensure it motivates security champions over time and supports broader business and security objectives. This includes refining reward types, adjusting criteria, and aligning incentives with meaningful contributions which incorporates security champions feedback. By regularly evaluating and adapting the system, the organization ensures it remains relevant, equitable, and i',
+        inds: ['Success metrics used to assess the impact of the reward system,', 'Adjustments made to recognition methods based on metrics, feedback and engagement trends,', 'Rewards linked to contributions that support strategic goals,', 'Sustained champion participation and satisfaction with the recognition system.']
+      },
+      {
+        id: 'q68', dim: 'sg', pillar: 'rr', lv: 2, title: 'We have defined and implemented a process to recognize contributions to the security champions community',
+        desc: 'The organization has established a structured process to acknowledge and celebrate contributions made by security champions and other community members. This includes recognizing efforts such as sharing knowledge, driving initiatives, mentoring peers, or improving security practices. Recognition may take the form of shout-outs, awards, badges, or inclusion in internal communications. A formal recognition process helps sustain motivation, reinforc',
+        inds: ['Regular acknowledgment of champions in meetings, newsletters, or platforms,', 'Visible appreciation that encourages continued engagement and participation.']
+      },
+      {
+        id: 'q69', dim: 'sg', pillar: 'apc', lv: 2, title: 'The security champion role is formalized and incorporated into job descriptions',
+        desc: 'The organization has formally defined the security champion role, including its purpose, responsibilities, and boundaries. This role description is integrated into relevant job profiles to ensure clarity, recognition, and accountability. By embedding the role into job descriptions, the organization reinforces its importance, supports long-term sustainability, and aligns expectations across teams.',
+        inds: ['A documented role description outlining responsibilities and limits of the security champion role,', 'Role expectations included in official job descriptions or HR systems,', 'Champions and their managers aligned on the role\'s scope, responsibilities and contribution.']
+      },
+      {
+        id: 'q70', dim: 'sg', pillar: 'rr', lv: 3, title: 'Security champions\' knowledge is used to improve policies, processes, and best practises',
+        desc: 'The organization actively incorporates the insights and expertise of security champions to enhance its broader security and operational practices. Contributions from champions—based on their hands-on experience and contextual understanding—are used to refine policies, strengthen team capabilities, improve workflows, and influence technology decisions. This approach ensures that knowledge sharing leads to meaningful, organization-wide improvements',
+        inds: ['Champion feedback reflected in updated policies or training materials,', 'Process or tooling changes informed by champion input,', 'Champions consulted as part of continuous improvement efforts.']
+      },
+      {
+        id: 'q71', dim: 'sg', pillar: 'iic', lv: 3, title: 'We continuously refine learning paths based on feedback, industry trends, and organizational goals',
+        desc: 'The organization maintains a dynamic approach to champion development by regularly updating learning paths to reflect feedback from participants, evolving industry standards, and shifting business priorities. This ensures that training remains relevant, impactful, and aligned with both individual growth and organizational needs. Continuous refinement supports long-term engagement and helps champions stay current in a rapidly changing security lan',
+        inds: ['Regular collection of feedback on learning content and formats,', 'Updates to learning paths based on emerging security trends and technologies,', 'Alignment of training materials with evolving organizational goals and risk priorities.']
+      },
+      {
+        id: 'q72', dim: 'sg', pillar: 'rr', lv: 3, title: 'We ensure training budgets can be used for relevant champion development opportunities',
+        desc: 'The organization enables security champions to access existing or additional training budgets for relevant learning activities, including certifications, courses, and conferences. This support reinforces the value of the role and encourages continuous development aligned with both individual growth and organizational security goals. Making budgets available ensures champions can pursue meaningful learning without financial barriers.',
+        inds: ['Champions able to request budget for security-related training or events,', 'Clear guidelines on eligible learning opportunities (e.g., certifications, conferences),', 'Budget usage aligned with champion development plans and organizational priorities.']
+      },
+      {
+        id: 'q73', dim: 'sg', pillar: 'apc', lv: 3, title: 'We have a defined strategy for allocating and replacing security champions to ensure consistent coverage',
+        desc: 'The organization has established a clear strategy for assigning security champions—such as one per team, per product, or per security domain—and ensures this allocation aligns with organizational needs. A structured process is in place to automatically detect when replacements are needed (e.g., due to role changes or departures), and quotas are monitored to maintain consistent coverage. This approach supports program resilience, reduces gaps, and',
+        inds: ['A documented allocation strategy based on team size, product scope, or specialization,', 'Automated or integrated processes to detect when champions need to be replaced,', 'Regular monitoring of champion quotas and coverage across the organization.']
+      }
+    ];
+
+    // ─── ARTIFACTS ───────────────────────────────────────────
+    // To add artifacts for a specific activity, add an entry:
+    //   'q1': [ { type: 'doc', title: 'Vision Template', desc: 'Word doc', url: './templates/vision.docx' } ]
+    // Types: 'doc'  = 📄  |  'video' = 🎬  |  'link' = 🔗
+    const ARTIFACTS = {
+      'q1': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' },
+        { type: 'link', title: 'Presentation: Business case for Security Champions', desc: 'SMS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Business%20case.pptx' },
+        { type: 'pdf', title: 'Four Approaches to Security Champions Programs', desc: 'SMS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Four%20Approaches%20to%20Security%20Champions%20Programs.pdf' }
+      ],
+      'q2': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' },
+        { type: 'link', title: 'Presentation: Business case for Security Champions', desc: 'SMS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Business%20case.pptx' },
+        { type: 'pdf', title: 'Four Approaches to Security Champions Programs', desc: 'SMS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Four%20Approaches%20to%20Security%20Champions%20Programs.pdf' }
+      ],
+      'q3': [
+        { type: 'link', title: 'Presentation: Business case for Security Champions', desc: 'SMS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Business%20case.pptx' },
+        { type: 'pdf', title: 'Four Approaches to Security Champions Programs', desc: 'SMS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Four%20Approaches%20to%20Security%20Champions%20Programs.pdf' }
+      ],
+      'q4': [
+        { type: 'link', title: 'Presentation: Business case for Security Champions', desc: 'SMS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Business%20case.pptx' },
+        { type: 'pdf', title: 'Four Approaches to Security Champions Programs', desc: 'SMS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Four%20Approaches%20to%20Security%20Champions%20Programs.pdf' }
+      ],
+      'q5': [
+        { type: 'link', title: 'Presentation: Business case for Security Champions', desc: 'SMS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Business%20case.pptx' },
+        { type: 'pdf', title: 'Four Approaches to Security Champions Programs', desc: 'SMS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Four%20Approaches%20to%20Security%20Champions%20Programs.pdf' }
+      ],
+      'q6': [
+        { type: 'link', title: 'Presentation: Business case for Security Champions', desc: 'SMS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Business%20case.pptx' },
+        { type: 'pdf', title: 'Four Approaches to Security Champions Programs', desc: 'SMS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Four%20Approaches%20to%20Security%20Champions%20Programs.pdf' }
+      ],
+      'q7': [
+        { type: 'pdf', title: 'Job vacancy: Dedicated Security Champion Captain', desc: 'NDC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Nominate%20a%20dedicated%20Captain%20-%20Job%20vacancy.pdf' }
+      ],
+      'q8': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' },
+        { type: 'pdf', title: 'Job vacancy: Dedicated Security Champion Captain', desc: 'NDC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Nominate%20a%20dedicated%20Captain%20-%20Job%20vacancy.pdf' }
+      ],
+      'q9': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' }
+      ],
+      'q10': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' }
+      ],
+      'q11': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' }
+      ],
+      'q12': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' },
+        { type: 'link', title: 'Presentation: Business case for Security Champions', desc: 'SMS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Business%20case.pptx' },
+        { type: 'pdf', title: 'Four Approaches to Security Champions Programs', desc: 'SMS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Four%20Approaches%20to%20Security%20Champions%20Programs.pdf' }
+      ],
+      'q13': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' }
+      ],
+      'q14': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' },
+        { type: 'link', title: 'Presentation: Business case for Security Champions', desc: 'SMS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Business%20case.pptx' },
+        { type: 'pdf', title: 'Four Approaches to Security Champions Programs', desc: 'SMS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Four%20Approaches%20to%20Security%20Champions%20Programs.pdf' }
+      ],
+      'q15': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' },
+        { type: 'link', title: 'Presentation: Business case for Security Champions', desc: 'SMS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Business%20case.pptx' },
+        { type: 'pdf', title: 'Four Approaches to Security Champions Programs', desc: 'SMS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Four%20Approaches%20to%20Security%20Champions%20Programs.pdf' },
+        { type: 'pdf', title: 'Job vacancy: Dedicated Security Champion Captain', desc: 'NDC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Nominate%20a%20dedicated%20Captain%20-%20Job%20vacancy.pdf' }
+      ],
+      'q16': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' },
+        { type: 'pdf', title: 'Job vacancy: Dedicated Security Champion Captain', desc: 'NDC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Nominate%20a%20dedicated%20Captain%20-%20Job%20vacancy.pdf' }
+      ],
+      'q17': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' },
+        { type: 'link', title: 'Presentation: Business case for Security Champions', desc: 'SMS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Business%20case.pptx' },
+        { type: 'pdf', title: 'Four Approaches to Security Champions Programs', desc: 'SMS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Four%20Approaches%20to%20Security%20Champions%20Programs.pdf' }
+      ],
+      'q18': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' },
+        { type: 'pdf', title: 'Job vacancy: Dedicated Security Champion Captain', desc: 'NDC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Nominate%20a%20dedicated%20Captain%20-%20Job%20vacancy.pdf' }
+      ],
+      'q19': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' }
+      ],
+      'q20': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' }
+      ],
+      'q21': [
+        { type: 'link', title: 'Presentation: Business case for Security Champions', desc: 'SMS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Business%20case.pptx' },
+        { type: 'pdf', title: 'Four Approaches to Security Champions Programs', desc: 'SMS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Four%20Approaches%20to%20Security%20Champions%20Programs.pdf' }
+      ],
+      'q22': [
+        { type: 'pdf', title: 'Job vacancy: Dedicated Security Champion Captain', desc: 'NDC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Nominate%20a%20dedicated%20Captain%20-%20Job%20vacancy.pdf' }
+      ],
+      'q23': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' }
+      ],
+      'q24': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' }
+      ],
+      'q25': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' }
+      ],
+      'q26': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' }
+      ],
+      'q27': [
+        { type: 'link', title: 'Presentation: Business case for Security Champions', desc: 'SMS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Business%20case.pptx' },
+        { type: 'pdf', title: 'Four Approaches to Security Champions Programs', desc: 'SMS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Secure%20management%20support%20-%20Four%20Approaches%20to%20Security%20Champions%20Programs.pdf' }
+      ],
+      'q28': [
+        { type: 'pdf', title: 'Job vacancy: Dedicated Security Champion Captain', desc: 'NDC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Nominate%20a%20dedicated%20Captain%20-%20Job%20vacancy.pdf' }
+      ],
+      'q29': [
+        { type: 'pdf', title: 'Job vacancy: Dedicated Security Champion Captain', desc: 'NDC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Nominate%20a%20dedicated%20Captain%20-%20Job%20vacancy.pdf' }
+      ],
+      'q30': [
+        { type: 'link', title: 'Presentation: Program Charter, Guidelines & Best Practices', desc: 'SAV no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Program%20Charter%2C%20Guidelines%20and%20Best%20Practices.pptx' },
+        { type: 'pdf', title: 'Presentation: Why Security Champions and how to start it', desc: 'SAV no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Why%20Security%20Champions%20and%20how%20to%20start%20it.pdf' },
+        { type: 'pdf', title: 'Waypoints and Pitfalls for R&D Organizations', desc: 'SAV no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Waypoints%20and%20Pitfalls%20for%20R%26D%20Organizations.pdf' },
+        { type: 'link', title: 'Champions League or Sunday League?', desc: 'SAV no. 4', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Start%20with%20a%20Clear%20Vision%20-%20Champions%20League%20or%20Sunday%20League.pptx' }
+      ],
+      'q31': [
+        { type: 'pdf', title: 'Checklist: Ignite the passion for security', desc: 'PAS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Be%20Passionate%20About%20Security%20-%20Checklist.pdf' },
+        { type: 'pdf', title: 'Case study: teaching as key community builder', desc: 'PKS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20teaching%20as%20key%20community%20builder.pdf' },
+        { type: 'pdf', title: 'Empowering Security Champions with Essential Tooling', desc: 'PKS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Empowering%20Security%20Champions%20with%20Essential%20Tooling.pdf' },
+        { type: 'pdf', title: 'Guideline: Security Champion Program Training Cadence', desc: 'PKS no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Training%20Cadence.pdf' }
+      ],
+      'q32': [
+        { type: 'pdf', title: 'Checklist: Ignite the passion for security', desc: 'PAS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Be%20Passionate%20About%20Security%20-%20Checklist.pdf' },
+        { type: 'pdf', title: 'Case study: teaching as key community builder', desc: 'PKS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20teaching%20as%20key%20community%20builder.pdf' },
+        { type: 'pdf', title: 'Empowering Security Champions with Essential Tooling', desc: 'PKS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Empowering%20Security%20Champions%20with%20Essential%20Tooling.pdf' },
+        { type: 'pdf', title: 'Guideline: Security Champion Program Training Cadence', desc: 'PKS no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Training%20Cadence.pdf' }
+      ],
+      'q33': [
+        { type: 'pdf', title: 'Checklist: Ignite the passion for security', desc: 'PAS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Be%20Passionate%20About%20Security%20-%20Checklist.pdf' },
+        { type: 'pdf', title: 'Case study: teaching as key community builder', desc: 'PKS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20teaching%20as%20key%20community%20builder.pdf' },
+        { type: 'pdf', title: 'Empowering Security Champions with Essential Tooling', desc: 'PKS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Empowering%20Security%20Champions%20with%20Essential%20Tooling.pdf' },
+        { type: 'pdf', title: 'Guideline: Security Champion Program Training Cadence', desc: 'PKS no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Training%20Cadence.pdf' }
+      ],
+      'q34': [
+        { type: 'pdf', title: 'Case study: teaching as key community builder', desc: 'PKS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20teaching%20as%20key%20community%20builder.pdf' },
+        { type: 'pdf', title: 'Empowering Security Champions with Essential Tooling', desc: 'PKS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Empowering%20Security%20Champions%20with%20Essential%20Tooling.pdf' },
+        { type: 'pdf', title: 'Guideline: Security Champion Program Training Cadence', desc: 'PKS no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Training%20Cadence.pdf' }
+      ],
+      'q35': [
+        { type: 'pdf', title: 'Case study: teaching as key community builder', desc: 'PKS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20teaching%20as%20key%20community%20builder.pdf' },
+        { type: 'pdf', title: 'Empowering Security Champions with Essential Tooling', desc: 'PKS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Empowering%20Security%20Champions%20with%20Essential%20Tooling.pdf' },
+        { type: 'pdf', title: 'Guideline: Security Champion Program Training Cadence', desc: 'PKS no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Training%20Cadence.pdf' }
+      ],
+      'q37': [
+        { type: 'pdf', title: 'Case study: teaching as key community builder', desc: 'PKS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20teaching%20as%20key%20community%20builder.pdf' },
+        { type: 'pdf', title: 'Empowering Security Champions with Essential Tooling', desc: 'PKS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Empowering%20Security%20Champions%20with%20Essential%20Tooling.pdf' },
+        { type: 'pdf', title: 'Guideline: Security Champion Program Training Cadence', desc: 'PKS no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Training%20Cadence.pdf' }
+      ],
+      'q38': [
+        { type: 'pdf', title: 'Checklist: Ignite the passion for security', desc: 'PAS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Be%20Passionate%20About%20Security%20-%20Checklist.pdf' },
+        { type: 'pdf', title: 'Case study: teaching as key community builder', desc: 'PKS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20teaching%20as%20key%20community%20builder.pdf' },
+        { type: 'pdf', title: 'Empowering Security Champions with Essential Tooling', desc: 'PKS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Empowering%20Security%20Champions%20with%20Essential%20Tooling.pdf' },
+        { type: 'pdf', title: 'Guideline: Security Champion Program Training Cadence', desc: 'PKS no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Training%20Cadence.pdf' }
+      ],
+      'q39': [
+        { type: 'pdf', title: 'Checklist: Ignite the passion for security', desc: 'PAS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Be%20Passionate%20About%20Security%20-%20Checklist.pdf' },
+        { type: 'pdf', title: 'How to support developers in secure coding?', desc: 'TYC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Trust%20your%20champions%20-%20How%20to%20support%20developers%20in%20secure%20coding.pdf' }
+      ],
+      'q40': [
+        { type: 'pdf', title: 'Case study: teaching as key community builder', desc: 'PKS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20teaching%20as%20key%20community%20builder.pdf' },
+        { type: 'pdf', title: 'Empowering Security Champions with Essential Tooling', desc: 'PKS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Empowering%20Security%20Champions%20with%20Essential%20Tooling.pdf' },
+        { type: 'pdf', title: 'Guideline: Security Champion Program Training Cadence', desc: 'PKS no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Training%20Cadence.pdf' }
+      ],
+      'q41': [
+        { type: 'pdf', title: 'How to support developers in secure coding?', desc: 'TYC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Trust%20your%20champions%20-%20How%20to%20support%20developers%20in%20secure%20coding.pdf' },
+        { type: 'pdf', title: 'Case study: teaching as key community builder', desc: 'PKS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20teaching%20as%20key%20community%20builder.pdf' },
+        { type: 'pdf', title: 'Empowering Security Champions with Essential Tooling', desc: 'PKS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Empowering%20Security%20Champions%20with%20Essential%20Tooling.pdf' },
+        { type: 'pdf', title: 'Guideline: Security Champion Program Training Cadence', desc: 'PKS no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Training%20Cadence.pdf' }
+      ],
+      'q42': [
+        { type: 'pdf', title: 'How to support developers in secure coding?', desc: 'TYC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Trust%20your%20champions%20-%20How%20to%20support%20developers%20in%20secure%20coding.pdf' }
+      ],
+      'q43': [
+        { type: 'pdf', title: 'How to support developers in secure coding?', desc: 'TYC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Trust%20your%20champions%20-%20How%20to%20support%20developers%20in%20secure%20coding.pdf' },
+        { type: 'pdf', title: 'Case study: teaching as key community builder', desc: 'PKS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20teaching%20as%20key%20community%20builder.pdf' },
+        { type: 'pdf', title: 'Empowering Security Champions with Essential Tooling', desc: 'PKS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Empowering%20Security%20Champions%20with%20Essential%20Tooling.pdf' },
+        { type: 'pdf', title: 'Guideline: Security Champion Program Training Cadence', desc: 'PKS no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Training%20Cadence.pdf' }
+      ],
+      'q44': [
+        { type: 'pdf', title: 'How to support developers in secure coding?', desc: 'TYC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Trust%20your%20champions%20-%20How%20to%20support%20developers%20in%20secure%20coding.pdf' },
+        { type: 'pdf', title: 'Case study: teaching as key community builder', desc: 'PKS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20teaching%20as%20key%20community%20builder.pdf' },
+        { type: 'pdf', title: 'Empowering Security Champions with Essential Tooling', desc: 'PKS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Empowering%20Security%20Champions%20with%20Essential%20Tooling.pdf' },
+        { type: 'pdf', title: 'Guideline: Security Champion Program Training Cadence', desc: 'PKS no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Training%20Cadence.pdf' }
+      ],
+      'q45': [
+        { type: 'pdf', title: 'How to support developers in secure coding?', desc: 'TYC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Trust%20your%20champions%20-%20How%20to%20support%20developers%20in%20secure%20coding.pdf' },
+        { type: 'pdf', title: 'Case study: teaching as key community builder', desc: 'PKS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20teaching%20as%20key%20community%20builder.pdf' },
+        { type: 'pdf', title: 'Empowering Security Champions with Essential Tooling', desc: 'PKS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Empowering%20Security%20Champions%20with%20Essential%20Tooling.pdf' },
+        { type: 'pdf', title: 'Guideline: Security Champion Program Training Cadence', desc: 'PKS no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Training%20Cadence.pdf' }
+      ],
+      'q46': [
+        { type: 'pdf', title: 'How to support developers in secure coding?', desc: 'TYC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Trust%20your%20champions%20-%20How%20to%20support%20developers%20in%20secure%20coding.pdf' }
+      ],
+      'q47': [
+        { type: 'pdf', title: 'Checklist: Ignite the passion for security', desc: 'PAS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Be%20Passionate%20About%20Security%20-%20Checklist.pdf' }
+      ],
+      'q48': [
+        { type: 'pdf', title: 'How to support developers in secure coding?', desc: 'TYC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Trust%20your%20champions%20-%20How%20to%20support%20developers%20in%20secure%20coding.pdf' }
+      ],
+      'q49': [
+        { type: 'pdf', title: 'Case study: teaching as key community builder', desc: 'PKS no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20teaching%20as%20key%20community%20builder.pdf' },
+        { type: 'pdf', title: 'Empowering Security Champions with Essential Tooling', desc: 'PKS no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Empowering%20Security%20Champions%20with%20Essential%20Tooling.pdf' },
+        { type: 'pdf', title: 'Guideline: Security Champion Program Training Cadence', desc: 'PKS no. 3', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Promote%20knowledge%20sharing%20-%20Training%20Cadence.pdf' },
+        { type: 'pdf', title: 'How to support developers in secure coding?', desc: 'TYC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Trust%20your%20champions%20-%20How%20to%20support%20developers%20in%20secure%20coding.pdf' }
+      ],
+      'q50': [
+        { type: 'pdf', title: 'How to support developers in secure coding?', desc: 'TYC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Trust%20your%20champions%20-%20How%20to%20support%20developers%20in%20secure%20coding.pdf' }
+      ],
+      'q51': [
+        { type: 'pdf', title: 'How to support developers in secure coding?', desc: 'TYC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Trust%20your%20champions%20-%20How%20to%20support%20developers%20in%20secure%20coding.pdf' }
+      ],
+      'q52': [
+        { type: 'pdf', title: 'How to support developers in secure coding?', desc: 'TYC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Trust%20your%20champions%20-%20How%20to%20support%20developers%20in%20secure%20coding.pdf' }
+      ],
+      'q53': [
+        { type: 'pdf', title: 'How to support developers in secure coding?', desc: 'TYC no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Trust%20your%20champions%20-%20How%20to%20support%20developers%20in%20secure%20coding.pdf' }
+      ],
+      'q54': [
+        { type: 'pdf', title: 'How to track points in a Security Champion Program', desc: 'RR no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20How%20to%20track%20points%20in%20a%20Security%20Champion%20Program.pdf' },
+        { type: 'pdf', title: 'Activity Logging Dashboard for Metrics-Oriented Programs', desc: 'RR no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20Activity%20Logging%20Dashboard.pdf' }
+      ],
+      'q58': [
+        { type: 'pdf', title: 'How to track points in a Security Champion Program', desc: 'RR no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20How%20to%20track%20points%20in%20a%20Security%20Champion%20Program.pdf' },
+        { type: 'pdf', title: 'Activity Logging Dashboard for Metrics-Oriented Programs', desc: 'RR no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20Activity%20Logging%20Dashboard.pdf' }
+      ],
+      'q60': [
+        { type: 'pdf', title: 'How to track points in a Security Champion Program', desc: 'RR no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20How%20to%20track%20points%20in%20a%20Security%20Champion%20Program.pdf' },
+        { type: 'pdf', title: 'Activity Logging Dashboard for Metrics-Oriented Programs', desc: 'RR no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20Activity%20Logging%20Dashboard.pdf' }
+      ],
+      'q61': [
+        { type: 'pdf', title: 'How to track points in a Security Champion Program', desc: 'RR no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20How%20to%20track%20points%20in%20a%20Security%20Champion%20Program.pdf' },
+        { type: 'pdf', title: 'Activity Logging Dashboard for Metrics-Oriented Programs', desc: 'RR no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20Activity%20Logging%20Dashboard.pdf' }
+      ],
+      'q62': [
+        { type: 'pdf', title: 'How to track points in a Security Champion Program', desc: 'RR no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20How%20to%20track%20points%20in%20a%20Security%20Champion%20Program.pdf' },
+        { type: 'pdf', title: 'Activity Logging Dashboard for Metrics-Oriented Programs', desc: 'RR no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20Activity%20Logging%20Dashboard.pdf' }
+      ],
+      'q66': [
+        { type: 'pdf', title: 'How to track points in a Security Champion Program', desc: 'RR no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20How%20to%20track%20points%20in%20a%20Security%20Champion%20Program.pdf' },
+        { type: 'pdf', title: 'Activity Logging Dashboard for Metrics-Oriented Programs', desc: 'RR no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20Activity%20Logging%20Dashboard.pdf' }
+      ],
+      'q67': [
+        { type: 'pdf', title: 'How to track points in a Security Champion Program', desc: 'RR no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20How%20to%20track%20points%20in%20a%20Security%20Champion%20Program.pdf' },
+        { type: 'pdf', title: 'Activity Logging Dashboard for Metrics-Oriented Programs', desc: 'RR no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20Activity%20Logging%20Dashboard.pdf' }
+      ],
+      'q68': [
+        { type: 'pdf', title: 'How to track points in a Security Champion Program', desc: 'RR no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20How%20to%20track%20points%20in%20a%20Security%20Champion%20Program.pdf' },
+        { type: 'pdf', title: 'Activity Logging Dashboard for Metrics-Oriented Programs', desc: 'RR no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20Activity%20Logging%20Dashboard.pdf' }
+      ],
+      'q70': [
+        { type: 'pdf', title: 'How to track points in a Security Champion Program', desc: 'RR no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20How%20to%20track%20points%20in%20a%20Security%20Champion%20Program.pdf' },
+        { type: 'pdf', title: 'Activity Logging Dashboard for Metrics-Oriented Programs', desc: 'RR no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20Activity%20Logging%20Dashboard.pdf' }
+      ],
+      'q72': [
+        { type: 'pdf', title: 'How to track points in a Security Champion Program', desc: 'RR no. 1', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20How%20to%20track%20points%20in%20a%20Security%20Champion%20Program.pdf' },
+        { type: 'pdf', title: 'Activity Logging Dashboard for Metrics-Oriented Programs', desc: 'RR no. 2', url: 'https://securitychampions.owasp.org/assets/artifacts/Security%20Champions%20Guide%20-%20Reward%20responsibility%20-%20Activity%20Logging%20Dashboard.pdf' }
+      ]
+    };
+
+    // ═══════════════════════════════════════════════════════════
+    //  STATE
+    // ═══════════════════════════════════════════════════════════
+    let activeFilter = 'all';
+    let activeQid = null;
+    let visibleIds = [];   // flat ordered list for prev/next
+
+    // ═══════════════════════════════════════════════════════════
+    //  BUILD GRID
+    // ═══════════════════════════════════════════════════════════
+    function buildGrid() {
+      const g = document.getElementById('mgrid');
+      g.innerHTML = '';
+
+      // ── column headers ──
+      const hRow = frag => {
+        hRow._cells = hRow._cells || [];
+      };
+
+      const h0 = el('div', 'gh gh-dim', '');
+      h0.innerHTML = '<span style="font-size:11px;color:var(--light)">Dimension</span>';
+      g.appendChild(h0);
+
+      [{ cls: 'gh-m1', n: '1', label: 'M1 — Foundational', sub: 'Initial optimisation' },
+      { cls: 'gh-m2', n: '2', label: 'M2 — Structured', sub: 'Structured realisation' },
+      { cls: 'gh-m3', n: '3', label: 'M3 — Advanced', sub: 'Optimised operation' }
+      ].forEach(({ cls, n, label, sub }) => {
+        const h = el('div', `gh ${cls}`, '');
+        h.innerHTML = `<span class="gh-badge">${n}</span><div><div>${label}</div><div class="gh-sub">${sub}</div></div>`;
+        h.dataset.lvFilter = n;
+        g.appendChild(h);
+      });
+
+      // ── rows ──
+      DIMS.forEach((dim, di) => {
+        const isLast = di === DIMS.length - 1;
+        const pillarsMap = Object.fromEntries((PILLARS[dim.id] || []).map(p => [p.id, p.l]));
+
+        // row label
+        const rl = el('div', `rl${isLast ? ' last-row-rl' : ''}`, '');
+        rl.innerHTML = `<div class="rl-icon">${dim.icon}</div>
+      <div class="rl-text"><h3>${dim.label}</h3><p>${dim.desc}</p></div>`;
+        if (isLast) rl.style.borderBottom = 'none';
+        g.appendChild(rl);
+
+        // 3 cells
+        [1, 2, 3].forEach(lv => {
+          const cell = el('div', `gc gc-m${lv}`, '');
+          cell.dataset.lvFilter = lv;
+          if (isLast) cell.style.borderBottom = 'none';
+
+          const qs = Q.filter(q => q.dim === dim.id && q.lv === lv);
+          qs.forEach(q => {
+            const chip = el('button', `chip c${lv}`, '');
+            chip.dataset.qid = q.id;
+            chip.dataset.lv = lv;
+            chip.innerHTML = `<span class="chip-pip"></span><span class="chip-label">${q.title}</span>`;
+            chip.onclick = () => openPanel(q.id);
+            chip.setAttribute('aria-label', q.title);
+            cell.appendChild(chip);
+          });
+
+          g.appendChild(cell);
+        });
+      });
+
+      rebuildVisibleList();
+    }
+
+    function el(tag, cls, html) {
+      const e = document.createElement(tag);
+      e.className = cls;
+      e.innerHTML = html;
+      return e;
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  ASSESSMENT RESULTS
+    // ═══════════════════════════════════════════════════════════
+    let assessmentResults = {};   // qid → 'full' | 'partial' | 'none' | ''
+    let activeStatusFilter = 'all';
+
+    function loadAssessmentResults() {
+      try {
+        const raw = localStorage.getItem('sc-assessment-results');
+        if (!raw) {
+          // No data — show "take assessment" banner, hide results banner
+          document.getElementById('no-results-banner').style.display = 'flex';
+          document.getElementById('results-banner').style.display = 'none';
+          return;
+        }
+        assessmentResults = JSON.parse(raw);
+        // Hide "no data" banner, show results banner
+        document.getElementById('no-results-banner').style.display = 'none';
+        applyAssessmentResults();
+      } catch (e) {
+        document.getElementById('no-results-banner').style.display = 'flex';
+        document.getElementById('results-banner').style.display = 'none';
+      }
+    }
+
+    function clearAssessmentResults() {
+      if (!confirm('Clear assessment results from this browser? The model grid will return to read-only view.')) return;
+      localStorage.removeItem('sc-assessment-results');
+      assessmentResults = {};
+      activeStatusFilter = 'all';
+      // Remove all status classes and badges from chips
+      document.querySelectorAll('.chip').forEach(chip => {
+        chip.classList.remove('st-full', 'st-partial', 'st-none');
+        chip.style.display = '';
+        const badge = chip.querySelector('.chip-status');
+        if (badge) badge.remove();
+      });
+      // Reset status filter buttons
+      ['all', 'full', 'partial', 'none', 'unanswered'].forEach(v => {
+        const btn = document.getElementById('rbf-' + v);
+        if (btn) btn.className = 'rb-filter-btn' + (v === 'all' ? ' on' : '');
+      });
+      rebuildVisibleList();
+      document.getElementById('results-banner').style.display = 'none';
+      document.getElementById('no-results-banner').style.display = 'flex';
+      if (activeQid) closePanel();
+    }
+
+    function applyAssessmentResults() {
+      const counts = { full: 0, partial: 0, none: 0, unanswered: 0 };
+
+      Q.forEach(q => {
+        const chip = document.querySelector(`[data-qid="${q.id}"]`);
+        if (!chip) return;
+        const val = assessmentResults[q.id] || '';
+        // Remove any previous status classes
+        chip.classList.remove('st-full', 'st-partial', 'st-none');
+        // Remove old status badge if present
+        const oldBadge = chip.querySelector('.chip-status');
+        if (oldBadge) oldBadge.remove();
+
+        if (val === 'full') {
+          chip.classList.add('st-full');
+          chip.insertAdjacentHTML('beforeend', '<span class="chip-status">✓</span>');
+          counts.full++;
+        } else if (val === 'partial') {
+          chip.classList.add('st-partial');
+          chip.insertAdjacentHTML('beforeend', '<span class="chip-status">◑</span>');
+          counts.partial++;
+        } else if (val === 'none') {
+          chip.classList.add('st-none');
+          chip.insertAdjacentHTML('beforeend', '<span class="chip-status">✕</span>');
+          counts.none++;
+        } else {
+          counts.unanswered++;
+        }
+      });
+
+      // Show banner with counts
+      document.getElementById('results-banner').style.display = 'flex';
+      document.getElementById('rb-full-count').textContent = counts.full;
+      document.getElementById('rb-partial-count').textContent = counts.partial;
+      document.getElementById('rb-none-count').textContent = counts.none;
+      document.getElementById('rb-unanswered-count').textContent = counts.unanswered;
+    }
+
+    function setStatusFilter(f) {
+      activeStatusFilter = f;
+
+      // Update button states
+      ['all', 'full', 'partial', 'none', 'unanswered'].forEach(v => {
+        const btn = document.getElementById('rbf-' + v);
+        if (!btn) return;
+        btn.className = 'rb-filter-btn' + (v === f ? (v === 'all' ? ' on' : ' on-' + v) : '');
+      });
+
+      // Show/hide chips based on status
+      document.querySelectorAll('.chip').forEach(chip => {
+        if (f === 'all') {
+          chip.style.display = '';
+          return;
+        }
+        const qid = chip.dataset.qid;
+        const val = assessmentResults[qid] || '';
+        const match = f === 'unanswered' ? (val === '') : (val === f);
+        chip.style.display = match ? '' : 'none';
+      });
+
+      rebuildVisibleList();
+      if (activeQid) {
+        const chip = document.querySelector(`[data-qid="${activeQid}"]`);
+        if (chip && chip.style.display === 'none') closePanel();
+        else updateNav();
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  FILTER
+    // ═══════════════════════════════════════════════════════════
+    function setFilter(f) {
+      activeFilter = f;
+      activeStatusFilter = 'all'; // reset status filter when switching level filter
+      ['all', '1', '2', '3'].forEach(v => {
+        const btn = document.getElementById('fb-' + (v === 'all' ? 'all' : v));
+        if (!btn) return;
+        btn.className = 'f-btn' + (v === f ? (v === 'all' ? ' on-all' : ' on-m' + v) : '');
+      });
+      // reset status filter buttons too
+      ['all', 'full', 'partial', 'none', 'unanswered'].forEach(v => {
+        const btn = document.getElementById('rbf-' + v);
+        if (btn) btn.className = 'rb-filter-btn' + (v === 'all' ? ' on' : '');
+      });
+
+      document.querySelectorAll('.chip').forEach(c => {
+        c.style.display = (f === 'all' || c.dataset.lv === f) ? '' : 'none';
+      });
+      document.querySelectorAll('[data-lv-filter]').forEach(el => {
+        const lv = el.dataset.lvFilter;
+        el.style.display = (f === 'all' || lv === f) ? '' : 'none';
+      });
+      document.getElementById('mgrid').style.gridTemplateColumns =
+        f === 'all' ? '190px repeat(3, minmax(200px,1fr))' : '190px 1fr';
+
+      rebuildVisibleList();
+      if (activeQid) {
+        const chip = document.querySelector(`[data-qid="${activeQid}"]`);
+        if (chip && chip.style.display === 'none') closePanel();
+        else updateNav();
+      }
+    }
+
+    function rebuildVisibleList() {
+      visibleIds = [];
+      document.querySelectorAll('.chip').forEach(c => {
+        if (c.style.display !== 'none') visibleIds.push(c.dataset.qid);
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  PANEL
+    // ═══════════════════════════════════════════════════════════
+    function openPanel(qid) {
+      const q = Q.find(x => x.id === qid);
+      if (!q) return;
+
+      activeQid = qid;
+      const dim = DIMS.find(d => d.id === q.dim);
+      const pillar = (PILLARS[q.dim] || []).find(p => p.id === q.pillar);
+      const lvName = { 1: 'M1 — Foundational', 2: 'M2 — Structured', 3: 'M3 — Advanced' };
+      const lvCls = { 1: 'm1', 2: 'm2', 3: 'm3' };
+      const lc = lvCls[q.lv];
+
+      // breadcrumb
+      document.getElementById('ph-crumb').innerHTML =
+        `<span>${dim.icon} ${dim.label}</span>
+     <span class="sep">›</span>
+     <span>${pillar ? pillar.l : q.pillar}</span>`;
+
+      // title
+      document.getElementById('ph-title').textContent = q.title;
+
+      // tags
+      document.getElementById('ph-tags').innerHTML =
+        `<span class="tag ${lc}">${lvName[q.lv]}</span>
+     <span class="tag dim">${dim.icon} ${dim.short}</span>
+     ${pillar ? `<span class="tag pillar">${pillar.l}</span>` : ''}`;
+
+      // assessment status in panel
+      const val = assessmentResults[qid];
+      const statusSection = document.getElementById('p-status-section');
+      const statusEl = document.getElementById('p-status');
+      if (val !== undefined) {
+        statusSection.style.display = 'block';
+        const statusMap = {
+          full: { cls: 'full', icon: '✓', label: 'Fully implemented' },
+          partial: { cls: 'partial', icon: '◑', label: 'Partially implemented — room to improve' },
+          none: { cls: 'none', icon: '✕', label: 'Not yet implemented' },
+          '': { cls: 'unanswered', icon: '–', label: 'Not assessed' }
+        };
+        const st = statusMap[val] || statusMap[''];
+        statusEl.innerHTML = `<span class="p-status-badge ${st.cls}">${st.icon} ${st.label}</span>`;
+      } else {
+        statusSection.style.display = 'none';
+      }
+
+      // description
+      document.getElementById('p-desc').textContent = q.desc;
+
+      // indicators
+      document.getElementById('p-inds').innerHTML =
+        (q.inds || []).map(i =>
+          `<div class="ind"><div class="ind-arrow">▸</div><span>${i}</span></div>`
+        ).join('') || '<div class="ind"><div class="ind-arrow">▸</div><span style="color:var(--light)">No indicators defined yet.</span></div>';
+
+      // artifacts
+      const arts = ARTIFACTS[qid] || [];
+      const typeIcon = { doc: '📄', video: '🎬', link: '🔗' };
+      const typeLabel = { doc: 'Document', video: 'Video', link: 'Link' };
+      if (arts.length) {
+        document.getElementById('p-arts').innerHTML =
+          `<div class="art-list">${arts.map(a =>
+            `<a href="${a.url}" class="art-card" target="_blank" rel="noopener">
+          <div class="art-ico ${a.type}">${typeIcon[a.type] || '📎'}</div>
+          <div class="art-info"><strong>${a.title}</strong><span>${a.desc}</span></div>
+          <span class="art-ext">${typeLabel[a.type] || ''} ↗</span>
+        </a>`).join('')}</div>`;
+      } else {
+        document.getElementById('p-arts').innerHTML =
+          `<div class="art-empty">
+        <p>No artifacts linked yet</p>
+        <span>Add templates, guides, or links to the ARTIFACTS object in the source.</span>
+      </div>`;
+      }
+
+      // chip highlight
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      const activeChip = document.querySelector(`[data-qid="${qid}"]`);
+      if (activeChip) {
+        activeChip.classList.add('active');
+        activeChip.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+
+      updateNav();
+      document.getElementById('overlay').classList.add('open');
+      document.getElementById('panel').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      document.querySelector('.pb').scrollTop = 0;
+    }
+
+    function updateNav() {
+      const idx = visibleIds.indexOf(activeQid);
+      document.getElementById('btn-prev').disabled = idx <= 0;
+      document.getElementById('btn-next').disabled = idx >= visibleIds.length - 1;
+      document.getElementById('pf-counter').textContent =
+        idx >= 0 ? `${idx + 1} / ${visibleIds.length}` : '';
+    }
+
+    function navigate(dir) {
+      const idx = visibleIds.indexOf(activeQid);
+      const next = visibleIds[idx + dir];
+      if (next) openPanel(next);
+    }
+
+    function closePanel() {
+      document.getElementById('overlay').classList.remove('open');
+      document.getElementById('panel').classList.remove('open');
+      document.body.style.overflow = '';
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      activeQid = null;
+    }
+
+    // keyboard
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closePanel();
+      if (e.key === 'ArrowRight' && activeQid) navigate(1);
+      if (e.key === 'ArrowLeft' && activeQid) navigate(-1);
+    });
+
+    // ═══════════════════════════════════════════════════════════
+    //  THEME
+    // ═══════════════════════════════════════════════════════════
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') !== 'light';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('theme-toggle').textContent = isDark ? '🌙' : '☀️';
+      localStorage.setItem('sc-theme', isDark ? 'light' : 'dark');
+    }
+    (function () {
+      const saved = localStorage.getItem('sc-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+      window.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('theme-toggle');
+        if (btn) btn.textContent = saved === 'light' ? '☀️' : '🌙';
+      });
+    })();
+
+    // ═══════════════════════════════════════════════════════════
+    //  INIT
+    // ═══════════════════════════════════════════════════════════
+    buildGrid();
+    loadAssessmentResults();
+  </script>
+
+
+</body>
+
+</html>
